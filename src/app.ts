@@ -4,6 +4,7 @@ import cors from 'cors'
 import httpStatus from 'http-status'
 const app:Application = express()
 import cookieParser from 'cookie-parser'
+import router from './app/routes'
 
 
 app.use(cors())
@@ -20,8 +21,7 @@ app.get("/",(req:Request,res:Response)=>{
 })
 
 
-
-// app.use("/api/v1",router)
+app.use("/api/v1",router)
 
 
 
