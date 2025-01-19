@@ -17,6 +17,8 @@ model User {
   createdAt          DateTime   @default(now())
   updatedAt          DateTime   @updatedAt
   admin              Admin?
+  doctor             Doctor?
+  patient            Patient?
 
   @@map("user")
 }
@@ -28,6 +30,7 @@ model Admin {
   user          User     @relation(fields: [email], references: [email])
   profilePhoto  String?
   address       String
+  gender        Gender
   contactNumber String
   isDeleted     Boolean  @default(false)
   createdAt     DateTime @default(now())
@@ -39,7 +42,8 @@ model Admin {
 model Doctor {
   id                  String   @id @default(uuid())
   name                String
-  email               String
+  email               String   @unique
+  doctor              User     @relation(fields: [email], references: [email])
   profilePhoto        String?
   contactNumber       String
   address             String
@@ -50,14 +54,34 @@ model Doctor {
   qualification       String
   currentWorkingPlace String
   designation         String
-  isDeleted           Boolean
   averageRating       Float
+  isDeleted           Boolean  @default(false)
   createdAt           DateTime @default(now())
   updatedAt           DateTime @updatedAt
 
   @@map("doctor")
 }
 
+model Patient {
+  id            String   @id @default(uuid())
+  email         String   @unique
+  patient       User     @relation(fields: [email], references: [email])
+  name          String
+  profilePhoto  String?
+  contactNumber String
+  address       String?
+  gender        Gender
+  isDeleted     Boolean  @default(false)
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  @@map("patient")
+}
+
+enum Gender {
+  MALE
+  FEMALE
+}
 
 enum userRole {
   SUPER_ADMIN
@@ -70,9 +94,4 @@ enum userStatus {
   ACTIVE
   BLOCKED
   DELETED
-}
-
-enum Gender {
-  MALE
-  FEMALE
 }

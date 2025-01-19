@@ -16,6 +16,30 @@ const insertAdminBD=catchAsync(async(req:Request,res:Response)=>{
  })
 
 
+const insertDoctorBD=catchAsync(async(req:Request,res:Response)=>{
+    const result= await userService.insertDoctorBD(req.file,req.body)
+    sendResponse(res,{
+      statusCode:httpStatus.OK,
+      success:true,
+      message:"Doctor created successfully",
+      data:result
+    })
+ })
+
+
+const insertPatientBD=catchAsync(async(req:Request,res:Response)=>{
+    const result= await userService.insertPatientBD(req.file,req.body)
+    sendResponse(res,{
+      statusCode:httpStatus.OK,
+      success:true,
+      message:"Patient created successfully",
+      data:result
+    })
+ })
+
+
  export const userController={
-    insertAdminBD
+    insertAdminBD,
+    insertDoctorBD,
+    insertPatientBD
  }

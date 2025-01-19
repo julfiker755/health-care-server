@@ -1,4 +1,4 @@
-import { userRole } from "@prisma/client";
+import { Gender, userRole } from "@prisma/client";
 import bcrypt from "bcrypt";
 import prisma from "../src/shared/prisma";
 
@@ -26,15 +26,16 @@ const seedSuperAdmin = async () => {
           create: {
             name: "Super Admin",
             contactNumber: "01741703755",
-            address:"khansama"
+            address:"khansama",
+            gender:Gender.MALE
           },
         },
       },
     });
 
-    console.log("Super Admin created successfully:", superAdminData);
+    console.log(superAdminData);
   } catch (error:any) {
-    console.error("Error creating Super Admin:", error);
+    console.error(error);
   } finally {
     await prisma.$disconnect();
   }

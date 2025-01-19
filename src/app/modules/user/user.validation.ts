@@ -1,17 +1,58 @@
 import { z } from "zod";
+import {Gender} from "@prisma/client";
+
+
 
 const adminSchema = z.object({
-  password: z.string().min(8, "Password must be at least 8 characters long"),
+  password: z.string().min(8, "Password must 8 characters"),
   admin: z.object({
     email: z.string().email("Invalid email address"),
     name: z.string().min(1, "Name is required"),
     contactNumber: z.string().regex(/^\+\d{10,15}$/, "Invalid contact number format"),
+    gender:z.enum([Gender.MALE,Gender.FEMALE]),
     address: z.string().min(1, "Address is required"),
   }),
 });
 
+
+
+const doctorSchema = z.object({
+  password: z.string().min(8, "Password must 8 characters"),
+  doctor: z.object({
+    email: z.string().email("Email is required"),
+    name: z.string().min(1, "Name is required"),
+    contactNumber: z.string().regex(/^\+\d{10,15}$/, "Invalid contact number format"),
+    address: z.string().min(1, "Address is required"),
+    registrationNumber: z.string().min(1, "Registration number is required"),
+    experience: z.number().int().min(0, "Experience must be a positive number"),
+    gender: z.enum([Gender.MALE,Gender.FEMALE]),
+    appointmentFee: z.number().int().min(0, " appointmentFee is required"),
+    qualification: z.string().min(1, "Qualification is required"),
+    currentWorkingPlace: z.string().min(1, "Current working place is required"),
+    designation: z.string().min(1, "Designation is required"),
+    averageRating: z.number().min(0, "Average rating must be a positive number"),
+  }),
+});
+
+
+
+const patientSchema = z.object({
+  password: z.string().min(8, "Password must 8 characters"),
+  patient: z.object({
+    email: z.string().email("Email is required"),
+    name: z.string().min(1, "Name is required"),
+    gender: z.enum([Gender.MALE,Gender.FEMALE]),
+    contactNumber: z.string().regex(/^\+\d{10,15}$/, "Invalid contact number format"),
+    address: z.string().optional(),
+  }),
+});
+
+
+
 export const userValidation ={
-    adminSchema
+    adminSchema,
+    doctorSchema,
+    patientSchema
 }
 
 

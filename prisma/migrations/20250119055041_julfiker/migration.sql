@@ -20,12 +20,36 @@ CREATE TABLE `admin` (
     `email` VARCHAR(191) NOT NULL,
     `profilePhoto` VARCHAR(191) NULL,
     `address` VARCHAR(191) NOT NULL,
+    `gender` ENUM('MALE', 'FEMALE') NOT NULL,
     `contactNumber` VARCHAR(191) NOT NULL,
     `isDeleted` BOOLEAN NOT NULL DEFAULT false,
     `createdAt` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
     `updatedAt` DATETIME(3) NOT NULL,
 
     UNIQUE INDEX `admin_email_key`(`email`),
+    PRIMARY KEY (`id`)
+) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+
+-- CreateTable
+CREATE TABLE `doctor` (
+    `id` VARCHAR(191) NOT NULL,
+    `name` VARCHAR(191) NOT NULL,
+    `email` VARCHAR(191) NOT NULL,
+    `profilePhoto` VARCHAR(191) NULL,
+    `contactNumber` VARCHAR(191) NOT NULL,
+    `address` VARCHAR(191) NOT NULL,
+    `registrationNumber` VARCHAR(191) NOT NULL,
+    `experience` INTEGER NOT NULL,
+    `gender` ENUM('MALE', 'FEMALE') NOT NULL,
+    `appointmentFee` INTEGER NOT NULL,
+    `qualification` VARCHAR(191) NOT NULL,
+    `currentWorkingPlace` VARCHAR(191) NOT NULL,
+    `designation` VARCHAR(191) NOT NULL,
+    `isDeleted` BOOLEAN NOT NULL,
+    `averageRating` DOUBLE NOT NULL,
+    `createdAt` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
+    `updatedAt` DATETIME(3) NOT NULL,
+
     PRIMARY KEY (`id`)
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 

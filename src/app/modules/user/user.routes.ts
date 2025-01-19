@@ -19,8 +19,21 @@ fileUploader.upload.single("file"),
 )
 
 
+router.post("/store-doctor",
+fileUploader.upload.single("file"),
+ catchAsync(async(req:Request,res:Response,next:NextFunction)=>{
+    req.body=userValidation.doctorSchema.parse(JSON.parse(req.body.data))
+    return userController.insertDoctorBD(req,res,next)
+ })
+)
 
-
+router.post("/store-patient",
+fileUploader.upload.single("file"),
+ catchAsync(async(req:Request,res:Response,next:NextFunction)=>{
+    req.body=userValidation.patientSchema.parse(JSON.parse(req.body.data))
+    return userController.insertPatientBD(req,res,next)
+ })
+)
 
 
 
