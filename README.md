@@ -5,7 +5,7 @@ To run the project, use:
 npm run dev
 ```
 
-o create a super admin, run:
+To create a super admin, run:
 ```sh
 npm run seed
 ```
