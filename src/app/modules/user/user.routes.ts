@@ -1,38 +1,26 @@
-import express, {NextFunction, Request, Response } from 'express'
+import express from 'express'
+import validateRequest from '../../middleware/validateRequest'
 import { userController } from './user.controller'
-import { fileUploader } from '../../../shared/fileUploader'
 import { userValidation } from './user.validation'
-import catchAsync from '../../../shared/catchAsync'
 
 
 
 const router = express.Router()
 
 
+router.post("/admin-store",
+validateRequest(userValidation.adminSchema),
+userController.insertAdminBD)
 
-router.post("/store-admin",
-fileUploader.upload.single("file"),
- catchAsync(async(req:Request,res:Response,next:NextFunction)=>{
-    req.body=userValidation.adminSchema.parse(JSON.parse(req.body.data))
-    return userController.insertAdminBD(req,res,next)
- })
+
+router.post("/doctor-store",
+validateRequest(userValidation.doctorSchema),
+userController.insertDoctorBD
 )
 
-
-router.post("/store-doctor",
-fileUploader.upload.single("file"),
- catchAsync(async(req:Request,res:Response,next:NextFunction)=>{
-    req.body=userValidation.doctorSchema.parse(JSON.parse(req.body.data))
-    return userController.insertDoctorBD(req,res,next)
- })
-)
-
-router.post("/store-patient",
-fileUploader.upload.single("file"),
- catchAsync(async(req:Request,res:Response,next:NextFunction)=>{
-    req.body=userValidation.patientSchema.parse(JSON.parse(req.body.data))
-    return userController.insertPatientBD(req,res,next)
- })
+router.post("/patient-store",
+validateRequest(userValidation.patientSchema),
+userController.insertPatientBD
 )
 
 

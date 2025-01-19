@@ -5,10 +5,7 @@ import prisma from "../../../shared/prisma";
 
 
 // admin
-const insertAdminBD = async (file: any, data: any) => {
-  if (file) {
-    data.admin.profilePhoto = file?.originalname;
-  }
+const insertAdminBD = async (data:any) => {
   const hashPassword = bcrypt.hashSync(data.password, 10);
 
   const userData = {
@@ -27,18 +24,15 @@ const insertAdminBD = async (file: any, data: any) => {
     return adminInfo;
   });
 
-  return result;
+  return result
 };
 
 
 
 
 // doctor
-const insertDoctorBD=async(file:any,data:any)=>{
-  if (file) {
-    data.doctor.profilePhoto = file?.originalname;
-  }
-  const hashPassword = bcrypt.hashSync(data.password, 10);
+const insertDoctorBD=async(data:any)=>{
+const hashPassword = bcrypt.hashSync(data.password, 10);
 
   const userData = {
     email: data.doctor.email,
@@ -61,10 +55,7 @@ const insertDoctorBD=async(file:any,data:any)=>{
 }
 
 // patient
-const insertPatientBD=async(file:any,data:any)=>{
-  if (file) {
-    data.patient.profilePhoto = file?.originalname;
-  }
+const insertPatientBD=async(data:any)=>{
   const hashPassword = bcrypt.hashSync(data.password, 10);
 
   const userData = {

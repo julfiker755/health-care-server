@@ -1,12 +1,14 @@
-import { Request, Response } from "express";
 import catchAsync from "../../../shared/catchAsync";
 import sendResponse from "../../../shared/sendResponse";
-import httpStatus from "http-status";
 import { userService } from "./user.service";
+import { Request, Response } from "express";
+import httpStatus from "http-status";
+
+
 
 
 const insertAdminBD=catchAsync(async(req:Request,res:Response)=>{
-    const result= await userService.insertAdminBD(req.file,req.body)
+    const result= await userService.insertAdminBD(req.body)
     sendResponse(res,{
       statusCode:httpStatus.OK,
       success:true,
@@ -17,7 +19,7 @@ const insertAdminBD=catchAsync(async(req:Request,res:Response)=>{
 
 
 const insertDoctorBD=catchAsync(async(req:Request,res:Response)=>{
-    const result= await userService.insertDoctorBD(req.file,req.body)
+    const result= await userService.insertDoctorBD(req.body)
     sendResponse(res,{
       statusCode:httpStatus.OK,
       success:true,
@@ -28,7 +30,7 @@ const insertDoctorBD=catchAsync(async(req:Request,res:Response)=>{
 
 
 const insertPatientBD=catchAsync(async(req:Request,res:Response)=>{
-    const result= await userService.insertPatientBD(req.file,req.body)
+    const result= await userService.insertPatientBD(req.body)
     sendResponse(res,{
       statusCode:httpStatus.OK,
       success:true,
