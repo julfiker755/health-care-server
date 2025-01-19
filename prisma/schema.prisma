@@ -7,7 +7,6 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-
 model User {
   id                 String     @id @default(uuid())
   email              String     @unique
@@ -21,7 +20,6 @@ model User {
 
   @@map("user")
 }
-
 
 model Admin {
   id            String   @id @default(uuid())
@@ -38,6 +36,28 @@ model Admin {
   @@map("admin")
 }
 
+model Doctor {
+  id                  String   @id @default(uuid())
+  name                String
+  email               String
+  profilePhoto        String?
+  contactNumber       String
+  address             String
+  registrationNumber  String
+  experience          Int
+  gender              Gender
+  appointmentFee      Int
+  qualification       String
+  currentWorkingPlace String
+  designation         String
+  isDeleted           Boolean
+  averageRating       Float
+  createdAt           DateTime @default(now())
+  updatedAt           DateTime @updatedAt
+
+  @@map("doctor")
+}
+
 
 enum userRole {
   SUPER_ADMIN
@@ -50,4 +70,9 @@ enum userStatus {
   ACTIVE
   BLOCKED
   DELETED
+}
+
+enum Gender {
+  MALE
+  FEMALE
 }
