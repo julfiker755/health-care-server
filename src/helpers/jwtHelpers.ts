@@ -1,5 +1,5 @@
 import jwt, { JwtPayload, Secret } from 'jsonwebtoken'
-import { authProps } from '../types'
+
 
 
 const generateToken=(payload:any,secret:Secret,expiresIn:any)=>{
