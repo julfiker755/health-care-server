@@ -11,5 +11,5 @@ npm run seed
 ```
 To generate dummy data, run:
 ```sh
-npm run seed
+npm run seeder
 ```
