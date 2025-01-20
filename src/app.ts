@@ -5,6 +5,7 @@ const app:Application = express()
 import cookieParser from 'cookie-parser'
 import router from './app/routes'
 import cors from 'cors'
+import { fileUploader } from './shared/fileUploader'
 
 
 
@@ -13,7 +14,7 @@ app.use(express.json())
 app.use(express.urlencoded({extended:true}))
 app.use(cookieParser())
 
-
+app.use('/uploads', express.static(fileUploader.uploadsDir));
 
 app.get("/",(req:Request,res:Response)=>{
   res.send({

@@ -26,4 +26,5 @@ const upload = multer({
 
 export const fileUploader = {
   upload,
+  uploadsDir
 };
