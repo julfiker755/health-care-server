@@ -15,7 +15,7 @@ const getProfileBD = async (user:any) => {
 
 
 const updateProfileBD = async (user:any, file: any, data: any) => {
-  if (file) data.profilePhoto = file?.originalname;
+  if (file) data.profilePhoto =file?.filename;
 
   await prisma.admin.findUniqueOrThrow({
     where: {

@@ -14,7 +14,7 @@ const storage = multer.diskStorage({
     cb(null, uploadsDir);
   },
   filename: function (req, file, cb) {
-    const uniqueName = `${uuidv4().split('-')[0]}-${file.originalname}`;
+    const uniqueName = `${uuidv4().split('-')[0]}${file.originalname}`;
     cb(null, uniqueName);
   },
 });
