@@ -1,3 +1,4 @@
+import { fileUploader } from "../../../shared/fileUploader";
 import prisma from "../../../shared/prisma";
 
 
@@ -17,11 +18,17 @@ const getProfileBD = async (user:any) => {
 const updateProfileBD = async (user:any, file: any, data: any) => {
   if (file) data.profilePhoto =file?.filename;
 
-  await prisma.admin.findUniqueOrThrow({
+ const adminInfo= await prisma.admin.findUniqueOrThrow({
     where: {
       email: user.email,
     },
   });
+
+    // Delete the preview image.
+    if(!!adminInfo.profilePhoto?.length) {
+      fileUploader.deleteFile(adminInfo.profilePhoto)
+    }
+  
 
   const result = await prisma.admin.update({
     where: {
