@@ -7,7 +7,6 @@ const router = express.Router()
 
 
 router.get("/my-profile",auth(userRole.SUPER_ADMIN,userRole.ADMIN), adminController.getProfileBD)
-
 router.put("/update",
     auth(userRole.SUPER_ADMIN,userRole.ADMIN),
     fileUploader.upload.single("file"),

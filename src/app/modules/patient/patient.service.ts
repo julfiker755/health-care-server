@@ -9,6 +9,7 @@ const getProfileBD = async (user:any) => {
     where: {
       email: user.email,
     },
+
   });
   return patientInfo;
 };
@@ -23,6 +24,7 @@ const updateProfileBD = async (user:any, file: any, data: any) => {
       email: user.email,
     },
   });
+  
 
   // Delete the previous image.
   if(!!patientInfo.profilePhoto?.length) {

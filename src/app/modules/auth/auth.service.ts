@@ -5,15 +5,13 @@ import { Secret } from "jsonwebtoken";
 import config from "../../config";
 import bcrypt from "bcrypt";
 
-
 type authProps = {
   email: string;
   password: string;
 };
 
-
 // auth login
-const loginAuth = async (data:authProps) => {
+const loginAuth = async (data: authProps) => {
   const userData = await prisma.user.findUniqueOrThrow({
     where: {
       email: data.email,
@@ -39,7 +37,6 @@ const loginAuth = async (data:authProps) => {
     config.jwt.accessTokenExpiration as string
   );
 
-
   const refreshToken = jwtHelpers.generateToken(
     {
       email: userData.email,
@@ -54,8 +51,6 @@ const loginAuth = async (data:authProps) => {
     needPasswordChange: userData.needPasswordChange,
   };
 };
-
-
 
 //   refreshToken
 const refreshToken = async (token: string) => {
@@ -86,7 +81,41 @@ const refreshToken = async (token: string) => {
   };
 };
 
+// change password
+const changePassword = async (user: any, data: any) => {
+  const userData = await prisma.user.findUniqueOrThrow({
+    where: {
+      email: user.email,
+      status: userStatus.ACTIVE,
+    },
+  });
+  const isCorrectPassword: Boolean = await bcrypt.compare(
+    data.oldPassword,
+    userData.password
+  );
+
+  if (!isCorrectPassword) {
+    throw new Error("Password is not vaild");
+  }
+  const hashPassword = bcrypt.hashSync(data.newPassword, 10);
+  const result = await prisma.user.update({
+    where: {
+      email: userData.email,
+    },
+    data: {
+      password: hashPassword,
+      needPasswordChange: true,
+    },
+  });
+  return result;
+};
+
+
+
+
+
 export const authService = {
   loginAuth,
   refreshToken,
+  changePassword,
 };
