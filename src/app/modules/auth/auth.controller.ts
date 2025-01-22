@@ -46,9 +46,20 @@ const changePassword=catchAsync(async(req:Request & {user?:any},res:Response)=>{
 })
 
 
+const forgotPassword=catchAsync(async(req:Request,res:Response)=>{
+    await authService.forgotPassword(req.body.email)
+    sendResponse(res,{
+        statusCode:httpStatus.OK,
+        success:true,
+        message:"Please check your email",
+        data:null
+    })
+})
+
 
 export const authController={
     loginAuth,
     refreshToken,
-    changePassword
+    changePassword,
+    forgotPassword
 }

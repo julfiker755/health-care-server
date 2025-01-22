@@ -4,6 +4,7 @@ import { userStatus } from "@prisma/client";
 import { Secret } from "jsonwebtoken";
 import config from "../../config";
 import bcrypt from "bcrypt";
+import emailSender from "../../../helpers/emailSender";
 
 type authProps = {
   email: string;
@@ -111,6 +112,39 @@ const changePassword = async (user: any, data: any) => {
 };
 
 
+// forgot password
+const forgotPassword=async(email:string)=>{
+  const userInfo=await prisma.user.findUnique({
+    where:{
+       email:email,
+       status:userStatus.ACTIVE
+    }
+  })
+
+  if(!userInfo){
+    throw new Error("User not vaild,check your Email")
+  }
+  
+  const resetPasswordToken=jwtHelpers.generateToken(
+    {
+     email:userInfo.email,
+     role:userInfo.role
+    },
+    config.jwt.secret as Secret,
+    config.jwt.resetTokenExpiration
+)
+ const resetPasswordLink=config.jwt.resetPasswordLink +`?userId=${userInfo.id}&token=${resetPasswordToken}`
+await emailSender(userInfo.email,`
+  <div>
+     <p>Dear User</p>
+     <p>Your Password Reset Link
+       <a href=${resetPasswordLink}>
+         <button>Reset Password</button>
+       </a>
+     </p>
+  </div>
+  `)
+}
 
 
 
@@ -118,4 +152,5 @@ export const authService = {
   loginAuth,
   refreshToken,
   changePassword,
+  forgotPassword
 };
