@@ -1,7 +1,54 @@
-import { userRole } from "@prisma/client";
-import bcrypt from "bcrypt";
+import { userRole, userStatus } from "@prisma/client";
 import prisma from "../../../shared/prisma";
+import bcrypt from "bcrypt";
 
+
+const getMyProfileBD=async(user:any)=>{
+  const userInfo=await prisma.user.findUniqueOrThrow({
+   where:{
+       email:user?.email,
+       status:userStatus.ACTIVE
+   },
+   select:{
+      id:true,
+      email:true,
+      role:true,
+      status:true,
+   }
+  })
+
+
+  let profileInfo
+  if(userInfo?.role === userRole.SUPER_ADMIN){
+    profileInfo=await prisma.admin.findUnique({
+       where:{
+           email:userInfo.email
+       }
+    })
+  }else if(userInfo?.role === userRole.ADMIN){
+     profileInfo=await prisma.admin.findUnique({
+       where:{
+           email:userInfo.email
+       }
+    })
+  }else if(userInfo?.role === userRole.DOCTOR){
+   profileInfo=await prisma.doctor.findUnique({
+       where:{
+           email:userInfo.email
+       }
+    })
+  }else if(userInfo?.role === userRole.PATIENT){
+   profileInfo=await prisma.patient.findUnique({
+       where:{
+           email:userInfo.email
+       }
+    })
+  }
+
+  
+ 
+  return {...userInfo,...profileInfo}
+}
 
 
 // admin
@@ -80,6 +127,7 @@ const insertPatientBD=async(data:any)=>{
 
 
 export const userService = {
+  getMyProfileBD,
   insertAdminBD,
   insertDoctorBD,
   insertPatientBD

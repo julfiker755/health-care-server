@@ -2,9 +2,11 @@ import { jwtHelpers } from "../../../helpers/jwtHelpers";
 import prisma from "../../../shared/prisma";
 import { userStatus } from "@prisma/client";
 import { Secret } from "jsonwebtoken";
+import emailSender from "../../../helpers/emailSender";
+import ApiError from "../../errors/ApiError";
+import httpStatus from "http-status";
 import config from "../../config";
 import bcrypt from "bcrypt";
-import emailSender from "../../../helpers/emailSender";
 
 type authProps = {
   email: string;
@@ -147,10 +149,38 @@ await emailSender(userInfo.email,`
 }
 
 
+// reset password
+const resetPassword=async(token:any,data:any)=>{
+   await prisma.user.findUniqueOrThrow({
+      where:{
+          id:data.id,
+          status:userStatus.ACTIVE
+      }
+  })
+  const isVaildToken=jwtHelpers.varifyToken(token,config.jwt.secret as string)
+
+  if(!isVaildToken){
+      throw new ApiError(httpStatus.FORBIDDEN,"Forbidden")
+  }
+  // hash password
+  const password = await bcrypt.hash(data.password, 12);
+
+  await prisma.user.update({
+      where: {
+          id:data.id
+      },
+      data: {
+          password
+      }
+  })
+}
+
+
 
 export const authService = {
   loginAuth,
   refreshToken,
+  resetPassword,
   changePassword,
   forgotPassword
 };

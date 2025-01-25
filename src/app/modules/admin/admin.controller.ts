@@ -7,17 +7,6 @@ import httpStatus from "http-status";
 
 
 
-const getProfileBD=catchAsync(async(req:Request & {user?:authProps},res:Response)=>{
-    const user=req.user
-    const result= await adminService.getProfileBD(user)
-    sendResponse(res,{
-      statusCode:httpStatus.OK,
-      success:true,
-      message:"Profile info successfully",
-      data:result
-    })
- })
-
 
 
 const updateProfileBD=catchAsync(async(req:Request & {user?:authProps},res:Response)=>{
@@ -33,6 +22,5 @@ const updateProfileBD=catchAsync(async(req:Request & {user?:authProps},res:Respo
 
 
  export const adminController={
-    getProfileBD,
     updateProfileBD
  }

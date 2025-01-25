@@ -4,6 +4,8 @@ import auth from "../../middleware/auth";
 import { userRole } from "@prisma/client";
 const router = express.Router();
 
+
+
 router.post("/", authController.loginAuth);
 router.post("/refresh-token", authController.refreshToken);
 router.post(

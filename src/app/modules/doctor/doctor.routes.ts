@@ -6,7 +6,6 @@ import { doctorController } from './doctor.controller'
 const router = express.Router()
 
 
-router.get("/my-profile",auth(userRole.SUPER_ADMIN,userRole.DOCTOR), doctorController.getProfileBD)
 
 router.put("/update",
     auth(userRole.SUPER_ADMIN,userRole.DOCTOR),

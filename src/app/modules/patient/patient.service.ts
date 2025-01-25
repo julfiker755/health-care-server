@@ -4,16 +4,6 @@ import prisma from "../../../shared/prisma";
 
 
 
-const getProfileBD = async (user:any) => {
-  const patientInfo = await prisma.patient.findUniqueOrThrow({
-    where: {
-      email: user.email,
-    },
-
-  });
-  return patientInfo;
-};
-
 
 
 const updateProfileBD = async (user:any, file: any, data: any) => {
@@ -44,6 +34,5 @@ const updateProfileBD = async (user:any, file: any, data: any) => {
 
 
 export const patientService = {
-  getProfileBD,
-  updateProfileBD,
+  updateProfileBD
 };

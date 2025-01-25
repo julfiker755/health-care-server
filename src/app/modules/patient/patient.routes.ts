@@ -6,7 +6,6 @@ import { userRole } from '@prisma/client'
 const router = express.Router()
 
 
-router.get("/my-profile",auth(userRole.SUPER_ADMIN,userRole.PATIENT), patientController.getProfileBD)
 
 router.put("/update",
     auth(userRole.SUPER_ADMIN,userRole.PATIENT),
