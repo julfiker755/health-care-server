@@ -1,6 +1,8 @@
 import { NextFunction, Request, RequestHandler, Response } from "express";
+import ApiCustomError from "../app/errors/ApiCustomError";
 import httpStatus from "http-status";
-import { z } from "zod";
+
+
 
 
 // This is a higher-order function
@@ -9,18 +11,12 @@ const catchAsync = (fn: RequestHandler): RequestHandler => {
     try {
       await fn(req, res, next);
     } catch (err: any) {
-      if (err instanceof z.ZodError) {
-        const formattedErrors = err.errors.map((issue) => ({
-          field: issue.path.join("."),
-          message: issue.message,
-        }));
-
-      
+      if (err instanceof ApiCustomError){
         res.status(httpStatus.BAD_REQUEST).json({
-          status: "error",
-          message: "Validation failed",
-          errors: formattedErrors,
+          message: "Validation failed. Check your sent data",
+          errors:err.customErrors || [],
         });
+        return;
       } else {
         next(err);
       }

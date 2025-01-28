@@ -3,6 +3,10 @@ import prisma from "../../../shared/prisma";
 import bcrypt from "bcrypt";
 
 
+
+
+
+
 const getMyProfileBD=async(user:any)=>{
   const userInfo=await prisma.user.findUniqueOrThrow({
    where:{
@@ -16,7 +20,6 @@ const getMyProfileBD=async(user:any)=>{
       status:true,
    }
   })
-
 
   let profileInfo
   if(userInfo?.role === userRole.SUPER_ADMIN){
@@ -60,6 +63,8 @@ const insertAdminBD = async (data:any) => {
     password: hashPassword,
     role: userRole.ADMIN,
   };
+
+
 
   const result = await prisma.$transaction(async (tx) => {
     await tx.user.create({

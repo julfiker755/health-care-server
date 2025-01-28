@@ -8,7 +8,7 @@ const validateRequest=(schema:AnyZodObject)=>{
             await schema.parseAsync(req.body)
              next()
          }catch(err){
-             if (err instanceof ZodError) {
+             if (err instanceof ZodError){
                 const formattedErrors = err.errors.map((issue) => ({
                   field: issue.path.join("."),
                   code: issue.code, 
