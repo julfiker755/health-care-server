@@ -15,7 +15,7 @@ const updateProfileBD = async (user:any, file: any, data: any) => {
   });
 
    // Delete the previous image
-  if(!!doctorInfo.profilePhoto?.length) {
+  if(doctorInfo.profilePhoto?.length && file?.filename?.length) {
     fileUploader.deleteFile(doctorInfo.profilePhoto)
   }
     

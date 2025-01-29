@@ -14,7 +14,7 @@ const updateProfileBD = async (user:any, file: any, data: any) => {
   });
 
     // Delete the preview image.
-    if(!!adminInfo.profilePhoto?.length) {
+    if(adminInfo.profilePhoto?.length && file?.filename?.length) {
       fileUploader.deleteFile(adminInfo.profilePhoto)
     }
   

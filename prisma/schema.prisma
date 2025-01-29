@@ -78,6 +78,16 @@ model Patient {
   @@map("patient")
 }
 
+model Specialities {
+  id        String   @id @default(uuid())
+  title     String
+  icon      String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("specialities")
+}
+
 enum Gender {
   MALE
   FEMALE
