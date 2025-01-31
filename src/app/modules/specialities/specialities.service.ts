@@ -3,19 +3,20 @@ import { fileUploader } from "../../../shared/fileUploader";
 import prisma from "../../../shared/prisma";
 import { paginationHelper } from "../../../shared/paginationHelpers";
 
+
+
 const storeGetBD = async (filters: any, options: any) => {
   const { page, skip, limit, sortBy, sortOrder } =
     paginationHelper.calculatePagination(options);
   const { search } = filters;
   const addCondition: Prisma.SpecialitiesWhereInput[] = [];
 
-  console.log(page, limit);
 
   if (search) {
     addCondition.push({
       OR: ["title"].map((field) => ({
         [field]: {
-          contains: search.toLowerCase(),
+          contains: search?.toLowerCase(),
         },
       })),
     });
@@ -29,17 +30,24 @@ const storeGetBD = async (filters: any, options: any) => {
     where: whereConditions,
     skip,
     take: limit,
-    orderBy:
-      sortBy && sortOrder
-        ? {
-            [sortBy]: sortOrder,
-          }
-        : {
-            createdAt: "desc",
-          },
+    orderBy: {
+      [sortBy]: sortOrder,
+    },
   });
-  return result;
+
+  const total = await prisma.specialities.count({
+    where:whereConditions
+  });
+
+  return {
+    page,
+    limit,
+    total,
+    data:result,
+  };
 };
+
+
 
 const storeSpceialitiesBD = async (file: any, data: any) => {
   if (file) data.icon = file?.filename;
@@ -69,6 +77,8 @@ const deleteSpceialitiesBD = async (id: string) => {
   return result;
 };
 
+
+
 const updateSpceialitiesBD = async (file: any, data: any, id: string) => {
   if (file) data.icon = file?.filename;
 
@@ -92,6 +102,8 @@ const updateSpceialitiesBD = async (file: any, data: any, id: string) => {
 
   return result;
 };
+
+
 
 export const specialitiesService = {
   updateSpceialitiesBD,

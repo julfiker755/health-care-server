@@ -1,20 +1,25 @@
 import { Request, Response } from "express";
 import catchAsync from "../../../shared/catchAsync";
 import sendResponse from "../../../shared/sendResponse";
-import { authProps } from "../../../types";
+import { authProps, paginationField} from "../../../types";
 import httpStatus from "http-status";
 import { specialitiesService } from "./specialities.service";
 import pink from "../../../shared/pink";
 
 const storeGetBD = catchAsync(async (req: Request, res: Response) => {
    const filters=pink(req.query,["search"])
-   const options=pink(req.query,["page","limit","sortBy","sortOrder"])
+   const options=pink(req.query,paginationField)
   const result = await specialitiesService.storeGetBD(filters,options);
   sendResponse(res, {
     statusCode: httpStatus.OK,
     success: true,
     message: "Specialties Info successfully",
-    data: result,
+    meta:{
+      page:result.page,
+      limit:result.limit,
+      total:result.total
+    },
+    data:result.data
   });
 });
 

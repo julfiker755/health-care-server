@@ -6,7 +6,7 @@ import { fileUploader } from '../../../shared/fileUploader'
 const router = express.Router()
 
 
-
+router.get('/',auth(userRole.SUPER_ADMIN,userRole.ADMIN),adminController.getIntoBD)
 router.put("/update",
     auth(userRole.SUPER_ADMIN,userRole.ADMIN),
     fileUploader.upload.single("file"),
