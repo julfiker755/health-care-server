@@ -15,7 +15,7 @@ const getIntoBD=catchAsync(async(req:Request,res:Response)=>{
     sendResponse(res,{
       statusCode:httpStatus.OK,
       success:true,
-      message:"Admin Info successfully",
+      message:"Doctor Info successfully",
       meta:{
          page:result.page,
          limit:result.limit,
@@ -31,7 +31,7 @@ const getIntoBD=catchAsync(async(req:Request,res:Response)=>{
     sendResponse(res,{
       statusCode:httpStatus.OK,
       success:true,
-      message:"Admin delete successfully",
+      message:"Doctor delete successfully",
        data:result
     })
  })
@@ -42,7 +42,7 @@ const getIntoBD=catchAsync(async(req:Request,res:Response)=>{
     sendResponse(res,{
       statusCode:httpStatus.OK,
       success:true,
-      message:"Admin soft delete successfully",
+      message:"Doctor soft delete successfully",
        data:result
     })
  })

@@ -9,7 +9,7 @@ const getIntoBD = async (filters: any, options: any) => {
   const { page, skip, limit, sortBy, sortOrder } =
     paginationHelper.calculatePagination(options);
   const { search, ...filterItem } = filters;
-  const addCondition:Prisma.DoctorWhereInput[]= [];
+  const addCondition: Prisma.AdminWhereInput[]= [];
 
   if (search) {
     addCondition.push({
@@ -35,10 +35,10 @@ const getIntoBD = async (filters: any, options: any) => {
     isDeleted: false,
   });
 
-  const whereConditions: Prisma.DoctorWhereInput =
+  const whereConditions: Prisma.AdminWhereInput =
     addCondition.length > 0 ? { AND: addCondition } : {};
 
-  const result = await prisma.doctor.findMany({
+  const result = await prisma.admin.findMany({
     where: whereConditions,
     skip,
     take: limit,
@@ -47,7 +47,7 @@ const getIntoBD = async (filters: any, options: any) => {
     },
   });
 
-  const total = await prisma.doctor.count({ where: whereConditions });
+  const total = await prisma.admin.count({ where: whereConditions });
 
   return {
     page,

@@ -1,4 +1,4 @@
-import { userStatus } from "@prisma/client";
+import { Prisma, userStatus } from "@prisma/client";
 import { fileUploader } from "../../../shared/fileUploader";
 import { paginationHelper } from "../../../shared/paginationHelpers";
 import prisma from "../../../shared/prisma";
@@ -11,7 +11,7 @@ const getIntoBD = async (filters: any, options: any) => {
   const { page, skip, limit, sortBy, sortOrder } =
     paginationHelper.calculatePagination(options);
   const { search, ...filterItem } = filters;
-  const addCondition= [];
+  const addCondition:Prisma.DoctorWhereInput[]= [];
 
   if (search) {
     addCondition.push({
@@ -37,10 +37,10 @@ const getIntoBD = async (filters: any, options: any) => {
     isDeleted: false,
   });
 
-  const whereConditions=
+  const whereConditions:Prisma.DoctorWhereInput=
     addCondition.length > 0 ? { AND: addCondition } : {};
 
-  const result = await prisma.admin.findMany({
+  const result = await prisma.doctor.findMany({
     where: whereConditions,
     skip,
     take: limit,
@@ -49,7 +49,7 @@ const getIntoBD = async (filters: any, options: any) => {
     },
   });
 
-  const total = await prisma.admin.count({ where: whereConditions });
+  const total = await prisma.doctor.count({ where: whereConditions });
 
   return {
     page,
@@ -61,21 +61,21 @@ const getIntoBD = async (filters: any, options: any) => {
 
 // deleteIntoDB
 const deleteIntoBD = async (id: string) => {
-  const adminInfo = await prisma.admin.findUniqueOrThrow({
+  const doctorInfo = await prisma.doctor.findUniqueOrThrow({
     where: { id },
   });
 
-  if (!!adminInfo.profilePhoto?.length) {
-    fileUploader.deleteFile(adminInfo.profilePhoto);
+  if (!!doctorInfo.profilePhoto?.length) {
+    fileUploader.deleteFile(doctorInfo.profilePhoto);
   }
 
   const result = await prisma.$transaction(async (tx) => {
-    const adminDeleteInfo = await tx.admin.delete({
-      where: { id: adminInfo.id },
+    const doctorDeleteInfo = await tx.doctor.delete({
+      where: { id: doctorInfo.id },
     });
     const result = await tx.user.delete({
       where: {
-        email: adminDeleteInfo.email,
+        email: doctorDeleteInfo.email,
       },
     });
     return result;
@@ -87,7 +87,7 @@ const deleteIntoBD = async (id: string) => {
 
 // softDeleteBD
 const softDeleteBD = async (id: string) => {
-  const adminInfo = await prisma.admin.findUniqueOrThrow({
+  const doctorInfo = await prisma.doctor.findUniqueOrThrow({
     where: {
       id: id,
       isDeleted: false,
@@ -95,13 +95,13 @@ const softDeleteBD = async (id: string) => {
   });
 
   const result = await prisma.$transaction(async (tx) => {
-    const adminDeleteInfo = await tx.admin.update({
-      where: { id: adminInfo.id },
+    const doctorDeleteInfo = await tx.doctor.update({
+      where: { id: doctorInfo.id },
       data: { isDeleted: true },
     });
     const result = await tx.user.update({
       where: {
-        email: adminDeleteInfo.email,
+        email: doctorDeleteInfo.email,
       },
       data: {
         status: userStatus.DELETED,
