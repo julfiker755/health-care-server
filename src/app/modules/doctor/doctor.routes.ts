@@ -7,6 +7,24 @@ const router = express.Router()
 
 
 
+router.get(
+    "/",
+    auth(userRole.SUPER_ADMIN, userRole.ADMIN),
+    doctorController.getIntoBD
+  );
+  
+  router.delete(
+    "/:id",
+    auth(userRole.SUPER_ADMIN, userRole.ADMIN),
+    doctorController.deleteIntoBD
+  );
+  
+  router.delete(
+    "/soft/:id",
+    auth(userRole.SUPER_ADMIN, userRole.ADMIN),
+    doctorController.softDeleteBD
+  );  
+
 router.put("/update",
     auth(userRole.SUPER_ADMIN,userRole.DOCTOR),
     fileUploader.upload.single("file"),

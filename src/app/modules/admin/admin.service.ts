@@ -1,76 +1,131 @@
-import { Prisma } from "@prisma/client";
+import { Prisma, userStatus } from "@prisma/client";
 import { fileUploader } from "../../../shared/fileUploader";
 import { paginationHelper } from "../../../shared/paginationHelpers";
 import prisma from "../../../shared/prisma";
 
-const getIntoBD=async(filters:any,options:any)=>{
+
+// getIntoBD
+const getIntoBD = async (filters: any, options: any) => {
   const { page, skip, limit, sortBy, sortOrder } =
-  paginationHelper.calculatePagination(options);
-const { search,...filterItem } = filters;
-const addCondition: Prisma.AdminWhereInput[] = [];
+    paginationHelper.calculatePagination(options);
+  const { search, ...filterItem } = filters;
+  const addCondition:Prisma.DoctorWhereInput[]= [];
 
+  if (search) {
+    addCondition.push({
+      OR: ["name"]?.map((field) => ({
+        [field]: {
+          contains: search?.toLowerCase(),
+        },
+      })),
+    });
+  }
 
-if (search) {
+  if (Object.keys(filterItem).length > 0) {
+    addCondition.push({
+      AND: Object.keys(filterItem).map((key) => ({
+        [key]: {
+          equals: (filterItem as any)[key],
+        },
+      })),
+    });
+  }
+
   addCondition.push({
-    OR:["name"]?.map((field) => ({
-      [field]: {
-        contains:search?.toLowerCase()
-      },
-    })),
+    isDeleted: false,
   });
-}
 
-if (Object.keys(filterItem).length > 0) {
-  addCondition.push({
-    AND: Object.keys(filterItem).map((key) => ({
-      [key]: {
-        equals: (filterItem as any)[key]
-      }
-    }))
-  })
-}
+  const whereConditions: Prisma.DoctorWhereInput =
+    addCondition.length > 0 ? { AND: addCondition } : {};
 
-addCondition.push({
-  isDeleted:false
-})
-
-const whereConditions: Prisma.AdminWhereInput = addCondition.length > 0 ? { AND: addCondition } :{};
-
-  const result=await prisma.admin.findMany({
+  const result = await prisma.doctor.findMany({
     where: whereConditions,
     skip,
     take: limit,
     orderBy: {
       [sortBy]: sortOrder,
-    }
-  })
+    },
+  });
 
-  const total = await prisma.admin.count({ where: whereConditions });
+  const total = await prisma.doctor.count({ where: whereConditions });
 
   return {
     page,
     limit,
     total,
-    data:result,
+    data: result,
   };
-}
+};
+
+// deleteIntoDB
+const deleteIntoBD = async (id: string) => {
+  const adminInfo = await prisma.admin.findUniqueOrThrow({
+    where: { id },
+  });
+
+  if (!!adminInfo.profilePhoto?.length) {
+    fileUploader.deleteFile(adminInfo.profilePhoto);
+  }
+
+  const result = await prisma.$transaction(async (tx) => {
+    const adminDeleteInfo = await tx.admin.delete({
+      where: { id: adminInfo.id },
+    });
+    const result = await tx.user.delete({
+      where: {
+        email: adminDeleteInfo.email,
+      },
+    });
+    return result;
+  });
+
+  return result;
+};
 
 
+// softDeleteBD
+const softDeleteBD = async (id: string) => {
+  const adminInfo = await prisma.admin.findUniqueOrThrow({
+    where: {
+      id: id,
+      isDeleted: false,
+    },
+  });
 
-const updateProfileBD = async (user:any, file: any, data: any) => {
-  if (file) data.profilePhoto =file?.filename;
+  const result = await prisma.$transaction(async (tx) => {
+    const adminDeleteInfo = await tx.admin.update({
+      where: { id: adminInfo.id },
+      data: { isDeleted: true },
+    });
+    const result = await tx.user.update({
+      where: {
+        email: adminDeleteInfo.email,
+      },
+      data: {
+        status: userStatus.DELETED,
+      }
+    });
+    return result;
+  });
 
- const adminInfo= await prisma.admin.findUniqueOrThrow({
+  return result;
+};
+
+
+// updateProfileBD
+const updateProfileBD = async (user: any, file: any, data: any) => {
+  if (file) data.profilePhoto = file?.filename;
+
+  const adminInfo = await prisma.admin.findUniqueOrThrow({
     where: {
       email: user.email,
     },
   });
 
-    // Delete the preview image.
-    if(adminInfo.profilePhoto?.length && file?.filename?.length) {
-      fileUploader.deleteFile(adminInfo.profilePhoto)
-    }
-  
+  // Delete the preview image.
+  if (adminInfo.profilePhoto?.length && file?.filename?.length) {
+    fileUploader.deleteFile(adminInfo.profilePhoto);
+  }
 
   const result = await prisma.admin.update({
     where: {
@@ -82,9 +137,9 @@ const updateProfileBD = async (user:any, file: any, data: any) => {
   return result;
 };
 
-
-
 export const adminService = {
+  softDeleteBD,
   updateProfileBD,
-  getIntoBD
+  deleteIntoBD,
+  getIntoBD,
 };

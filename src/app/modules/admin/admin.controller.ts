@@ -5,7 +5,7 @@ import { adminService } from "./admin.service";
 import { authProps, paginationField } from "../../../types";
 import httpStatus from "http-status";
 import pink from "../../../shared/pink";
-import { adminSearchField } from "./admin.constant";
+
 
 
 
@@ -28,6 +28,28 @@ const getIntoBD=catchAsync(async(req:Request,res:Response)=>{
     })
  })
 
+ const deleteIntoBD=catchAsync(async(req:Request,res:Response)=>{
+   const {id}=req.params
+    const result= await adminService.deleteIntoBD(id)
+    sendResponse(res,{
+      statusCode:httpStatus.OK,
+      success:true,
+      message:"Admin delete successfully",
+       data:result
+    })
+ })
+
+ const softDeleteBD=catchAsync(async(req:Request,res:Response)=>{
+   const {id}=req.params
+    const result= await adminService.softDeleteBD(id)
+    sendResponse(res,{
+      statusCode:httpStatus.OK,
+      success:true,
+      message:"Admin soft delete successfully",
+       data:result
+    })
+ })
+
 const updateProfileBD=catchAsync(async(req:Request & {user?:authProps},res:Response)=>{
     const user=req.user
     const result= await adminService.updateProfileBD(user,req.file,req.body)
@@ -42,5 +64,7 @@ const updateProfileBD=catchAsync(async(req:Request & {user?:authProps},res:Respo
 
  export const adminController={
     getIntoBD,
-    updateProfileBD
+    updateProfileBD,
+    softDeleteBD,
+    deleteIntoBD
  }
