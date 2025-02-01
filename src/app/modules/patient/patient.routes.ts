@@ -6,6 +6,23 @@ import { userRole } from '@prisma/client'
 const router = express.Router()
 
 
+router.get(
+    "/",
+    auth(userRole.SUPER_ADMIN,userRole.DOCTOR),
+    patientController.getIntoBD
+  );
+  
+  router.delete(
+    "/:id",
+    auth(userRole.SUPER_ADMIN,userRole.DOCTOR),
+    patientController.deleteIntoBD
+  );
+  
+  router.delete(
+    "/soft/:id",
+    auth(userRole.SUPER_ADMIN,userRole.DOCTOR),
+    patientController.softDeleteBD
+  )
 
 router.put("/update",
     auth(userRole.SUPER_ADMIN,userRole.PATIENT),
