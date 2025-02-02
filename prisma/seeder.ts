@@ -10,6 +10,7 @@ const adminData = [
       name: "Julfiker",
       gender: "MALE",
       contactNumber: "+1234567890",
+      profilePhoto:"admin1.jpg",
       address: "123 Harmony St, Peace City, PC 12345",
     },
   },
@@ -19,6 +20,7 @@ const adminData = [
       email: "admin1@example.com",
       name: "John Doe",
       gender: "MALE",
+      profilePhoto:"admin2.jpg",
       contactNumber: "+1234567890",
       address: "123 Harmony St, Peace City, PC 12345",
     },
@@ -30,6 +32,7 @@ const adminData = [
       name: "Jane Smith",
       gender: "FEMALE",
       contactNumber: "+2345678901",
+      profilePhoto:"admin3.jpg",
       address: "456 Unity Ave, Kindness Town, KT 23456",
     },
   },
@@ -40,6 +43,7 @@ const adminData = [
       name: "Michael Brown",
       gender: "MALE",
       contactNumber: "+3456789012",
+      profilePhoto:"admin4.jpg",
       address: "789 Serenity Blvd, Bliss Village, BV 34567",
     },
   },
@@ -50,6 +54,7 @@ const adminData = [
       name: "Emily Davis",
       gender: "FEMALE",
       contactNumber: "+4567890123",
+      profilePhoto:"admin5.jpg",
       address: "321 Tranquility Rd, Calm City, CC 45678",
     },
   },
@@ -60,6 +65,7 @@ const adminData = [
       name: "Chris Johnson",
       gender: "MALE",
       contactNumber: "+5678901234",
+      profilePhoto:"admin6.jpg",
       address: "654 Wellness St, Vitality Town, VT 56789",
     },
   },
@@ -81,6 +87,7 @@ const doctorData = [
       currentWorkingPlace: "HealthCare Center",
       designation: "Consultant",
       averageRating: 4.8,
+      profilePhoto:"doctor1.jpg",
     },
   },
   {
@@ -98,6 +105,7 @@ const doctorData = [
       currentWorkingPlace: "Healing Hands Hospital",
       designation: "Senior Consultant",
       averageRating: 4.9,
+      profilePhoto:"doctor2.jpg",
     },
   },
   {
@@ -115,6 +123,7 @@ const doctorData = [
       currentWorkingPlace: "Cure Clinic",
       designation: "Ophthalmologist",
       averageRating: 4.7,
+      profilePhoto:"doctor3.jpg",
     },
   },
   {
@@ -132,6 +141,7 @@ const doctorData = [
       currentWorkingPlace: "Health Plus Hospital",
       designation: "Cardiologist",
       averageRating: 4.6,
+      profilePhoto:"doctor4.jpg",
     },
   },
   {
@@ -149,6 +159,7 @@ const doctorData = [
       currentWorkingPlace: "Wellness Hospital",
       designation: "Orthopedic Surgeon",
       averageRating: 4.8,
+      profilePhoto:"doctor5.jpg",
     },
   },
   {
@@ -166,6 +177,7 @@ const doctorData = [
       currentWorkingPlace: "Elite Health Clinic",
       designation: "Gastroenterologist",
       averageRating: 4.9,
+      profilePhoto:"doctor6.jpg",
     },
   },
   {
@@ -183,6 +195,7 @@ const doctorData = [
       currentWorkingPlace: "Remedy Health Center",
       designation: "Dermatologist",
       averageRating: 4.7,
+      profilePhoto:"doctor7.jpg",
     },
   },
   {
@@ -200,6 +213,7 @@ const doctorData = [
       currentWorkingPlace: "Healthy Life Clinic",
       designation: "Pulmonologist",
       averageRating: 4.8,
+      profilePhoto:"doctor8.jpg",
     },
   },
   {
@@ -217,6 +231,7 @@ const doctorData = [
       currentWorkingPlace: "Advanced Care Hospital",
       designation: "Neurologist",
       averageRating: 4.9,
+      profilePhoto:"doctor9.jpg",
     },
   },
   {
@@ -234,6 +249,7 @@ const doctorData = [
       currentWorkingPlace: "Comprehensive Health Clinic",
       designation: "Oncologist",
       averageRating: 4.8,
+      profilePhoto:"doctor5.jpg",
     },
   },
 ];
