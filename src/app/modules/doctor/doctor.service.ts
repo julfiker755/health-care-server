@@ -47,6 +47,21 @@ const getIntoBD = async (filters: any, options: any) => {
     orderBy: {
       [sortBy]: sortOrder,
     },
+    include:{
+      specialities:{
+        select:{
+            specialitiesId:false,
+            doctorId:false,
+            specialities:{
+               select:{
+                  id:true,
+                  title:true,
+                  icon:true
+               }
+            }
+        }
+      }
+    }
   });
 
   const total = await prisma.doctor.count({ where: whereConditions });
@@ -55,10 +70,39 @@ const getIntoBD = async (filters: any, options: any) => {
     page,
     limit,
     total,
-    data: result,
+    data: result.map(item=>({
+      ...item,
+      specialities:item.specialities.map(item=>item.specialities)
+    })),
   };
 };
-
+// specialitieGetBD
+const specialitieGetBD=async(user:any)=>{
+  const doctorInfo=await prisma.doctor.findUniqueOrThrow({
+    where:{
+      email:user.email
+    },
+    include:{
+      specialities:{
+        select:{
+            specialitiesId:false,
+            doctorId:false,
+            specialities:{
+               select:{
+                  id:true,
+                  title:true,
+                  icon:true
+               }
+            }
+        }
+      }
+    }
+  })
+  console.log(doctorInfo.specialities)
+  return doctorInfo.specialities.map(item=>({
+    ...item.specialities
+  }))
+}
 // deleteIntoDB
 const deleteIntoBD = async (id: string) => {
   const doctorInfo = await prisma.doctor.findUniqueOrThrow({
@@ -113,6 +157,35 @@ const softDeleteBD = async (id: string) => {
   return result;
 };
 
+// specialitieStoreBD
+const specialitieStoreBD=async(user:any,data:any)=>{
+  const doctorInfo=await prisma.doctor.findUniqueOrThrow({
+    where:{
+      email:user.email
+    }
+  })
+
+   
+
+ for(const ids of data?.specialitiesId){
+      await prisma.doctorSpecialities.create({
+        data:{
+          specialitiesId:ids,
+          doctorId:doctorInfo.id
+        }
+      })
+ }
+
+const result=await prisma.doctor.findUniqueOrThrow({
+  where:{
+    id:doctorInfo.id
+  },
+  include:{
+    specialities:true
+  }
+})
+return result
+}
 
 
 const updateProfileBD = async (user:any, file: any, data: any) => {
@@ -147,4 +220,6 @@ export const doctorService = {
   deleteIntoBD,
   softDeleteBD,
   updateProfileBD,
+  specialitieStoreBD,
+  specialitieGetBD
 };

@@ -25,6 +25,17 @@ router.get(
     doctorController.softDeleteBD
   );  
 
+router.post('/specialities-store',
+  auth(userRole.SUPER_ADMIN,userRole.DOCTOR),
+  doctorController.specialitieStoreBD
+)
+
+router.get('/specialities',
+  auth(userRole.SUPER_ADMIN,userRole.DOCTOR),
+  doctorController.specialitieGetBD
+)
+
+
 router.put("/update",
     auth(userRole.SUPER_ADMIN,userRole.DOCTOR),
     fileUploader.upload.single("file"),

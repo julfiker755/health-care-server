@@ -33,17 +33,48 @@ const storeGetBD = async (filters: any, options: any) => {
     orderBy: {
       [sortBy]: sortOrder,
     },
+    include:{
+      doctor:{
+        select:{
+          specialitiesId:false,
+          doctorId:false,
+          doctor:{
+            select:{
+               id:true,
+               name:true,
+               email:true,
+               profilePhoto:true,
+               contactNumber:true,
+               address:true,
+               registrationNumber:true,
+               experience:true,
+               gender:true,
+               appointmentFee:true,
+               qualification:true,
+               currentWorkingPlace:true,
+               designation:true,
+               averageRating:true,
+               isDeleted:true
+            }
+          }
+      }
+      }
+    }
   });
 
   const total = await prisma.specialities.count({
     where:whereConditions
   });
 
+
   return {
     page,
     limit,
     total,
-    data:result,
+    data:result.map((item)=>({
+      ...item,
+      doctor:item.doctor.map(item=>item.doctor)
+    })),
   };
 };
 

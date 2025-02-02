@@ -47,6 +47,28 @@ const getIntoBD=catchAsync(async(req:Request,res:Response)=>{
     })
  })
 
+ const specialitieStoreBD=catchAsync(async(req:Request & {user?:authProps},res:Response)=>{
+    const user=req.user
+    const result= await doctorService.specialitieStoreBD(user,req.body)
+    sendResponse(res,{
+      statusCode:httpStatus.OK,
+      success:true,
+      message:"Doctor specialitie create successfully",
+       data:result
+    })
+ })
+
+ const specialitieGetBD=catchAsync(async(req:Request & {user?:authProps},res:Response)=>{
+    const user=req.user
+    const result= await doctorService.specialitieGetBD(user)
+    sendResponse(res,{
+      statusCode:httpStatus.OK,
+      success:true,
+      message:"Doctor specialities info successfully",
+       data:result
+    })
+ })
+
 const updateProfileBD=catchAsync(async(req:Request & {user?:authProps},res:Response)=>{
     const user=req.user
     const result= await doctorService.updateProfileBD(user,req.file,req.body)
@@ -63,5 +85,7 @@ const updateProfileBD=catchAsync(async(req:Request & {user?:authProps},res:Respo
    getIntoBD,
    deleteIntoBD,
    softDeleteBD,
-   updateProfileBD
+   updateProfileBD,
+   specialitieStoreBD,
+   specialitieGetBD
  }
