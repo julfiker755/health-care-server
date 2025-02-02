@@ -60,7 +60,8 @@ const getIntoBD = async (filters: any, options: any) => {
                }
             }
         }
-      }
+      },
+    review:true
     }
   });
 
@@ -76,6 +77,8 @@ const getIntoBD = async (filters: any, options: any) => {
     })),
   };
 };
+
+
 // specialitieGetBD
 const specialitieGetBD=async(user:any)=>{
   const doctorInfo=await prisma.doctor.findUniqueOrThrow({
@@ -87,22 +90,17 @@ const specialitieGetBD=async(user:any)=>{
         select:{
             specialitiesId:false,
             doctorId:false,
-            specialities:{
-               select:{
-                  id:true,
-                  title:true,
-                  icon:true
-               }
-            }
+            specialities:true
         }
       }
     }
   })
-  console.log(doctorInfo.specialities)
   return doctorInfo.specialities.map(item=>({
     ...item.specialities
   }))
 }
+
+
 // deleteIntoDB
 const deleteIntoBD = async (id: string) => {
   const doctorInfo = await prisma.doctor.findUniqueOrThrow({

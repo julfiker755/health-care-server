@@ -58,7 +58,8 @@ model Doctor {
   isDeleted           Boolean              @default(false)
   createdAt           DateTime             @default(now())
   updatedAt           DateTime             @updatedAt
-  specialities  doctorSpecialities[]
+  specialities        doctorSpecialities[]
+  review              Review[]
 
   @@map("doctor")
 }
@@ -75,21 +76,21 @@ model Patient {
   isDeleted     Boolean  @default(false)
   createdAt     DateTime @default(now())
   updatedAt     DateTime @updatedAt
+  review        Review[]
 
   @@map("patient")
 }
 
 model Specialities {
-  id                 String               @id @default(uuid())
-  title              String
-  icon               String?
-  createdAt          DateTime             @default(now())
-  updatedAt          DateTime             @updatedAt
-  doctor doctorSpecialities[]
+  id        String               @id @default(uuid())
+  title     String
+  icon      String?
+  createdAt DateTime             @default(now())
+  updatedAt DateTime             @updatedAt
+  doctor    doctorSpecialities[]
 
   @@map("specialities")
 }
-
 
 model doctorSpecialities {
   specialitiesId String
@@ -101,6 +102,19 @@ model doctorSpecialities {
   @@map("doctor_specialities")
 }
 
+model Review {
+  id        String   @id @default(uuid())
+  patientId String
+  patient   Patient  @relation(fields: [patientId], references: [id])
+  doctorId  String
+  doctor    Doctor   @relation(fields: [doctorId], references: [id])
+  rating    Float
+  comment   String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("reviews")
+}
 
 enum Gender {
   MALE
