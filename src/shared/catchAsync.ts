@@ -13,6 +13,7 @@ const catchAsync = (fn: RequestHandler): RequestHandler => {
     } catch (err: any) {
       if (err instanceof ApiCustomError){
         res.status(httpStatus.BAD_REQUEST).json({
+          success:false,
           message: "Validation failed. Check your sent data",
           errors:err.customErrors || [],
         });

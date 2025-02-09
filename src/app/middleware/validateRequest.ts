@@ -16,6 +16,7 @@ const validateRequest=(schema:AnyZodObject)=>{
                 }));
 
                 res.status(httpStatus.BAD_REQUEST).json({
+                  success:false,
                   message: "Validation failed. Check your sent data",
                   errors: formattedErrors,
                 });

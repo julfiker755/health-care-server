@@ -13,7 +13,7 @@ const globalErrorHander = (
   let message = err.message || "Something went wrong!";
   let error = err;
 
-  console.log(err)
+
 
   if (err instanceof Prisma.PrismaClientValidationError) {
     message = "Validation Error";
