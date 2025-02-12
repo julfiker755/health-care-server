@@ -24,6 +24,16 @@ const getIntoBD=catchAsync(async(req:Request,res:Response)=>{
        data:result.data
     })
  })
+const getSingleBD=catchAsync(async(req:Request,res:Response)=>{
+   const {id}=req.params
+    const result= await doctorService.getSingleBD(id)
+    sendResponse(res,{
+      statusCode:httpStatus.OK,
+      success:true,
+      message:"Doctor Single Info successfully",
+       data:result
+    })
+ })
 
  const deleteIntoBD=catchAsync(async(req:Request,res:Response)=>{
    const {id}=req.params
@@ -83,6 +93,7 @@ const updateProfileBD=catchAsync(async(req:Request & {user?:authProps},res:Respo
 
  export const doctorController={
    getIntoBD,
+   getSingleBD,
    deleteIntoBD,
    softDeleteBD,
    updateProfileBD,

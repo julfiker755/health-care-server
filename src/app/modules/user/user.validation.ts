@@ -21,9 +21,7 @@ const doctorSchema = z.object({
   doctor: z.object({
     email: z.string().email("Email is required"),
     name: z.string().min(1, "Name is required"),
-    contactNumber: z
-      .string()
-      .regex(/^\+\d{10,15}$/, "Invalid contact number format"),
+    contactNumber: z.string().min(10, {message: 'Phone number must be at least 10 digits.'}),
     address: z.string().min(1, "Address is required"),
     registrationNumber: z.string().min(1, "Registration number is required"),
     experience: z.number().int().min(0, "Experience must be a positive number"),
@@ -32,10 +30,7 @@ const doctorSchema = z.object({
     qualification: z.string().min(1, "Qualification is required"),
     currentWorkingPlace: z.string().min(1, "Current working place is required"),
     designation: z.string().min(1, "Designation is required"),
-    averageRating: z
-      .number()
-      .min(0, "Average rating must be a positive number"),
-  }),
+  })
 });
 
 const patientSchema = z.object({

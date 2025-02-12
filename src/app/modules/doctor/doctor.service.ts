@@ -3,15 +3,12 @@ import { fileUploader } from "../../../shared/fileUploader";
 import { paginationHelper } from "../../../shared/paginationHelpers";
 import prisma from "../../../shared/prisma";
 
-
-
-
 // getIntoBD
 const getIntoBD = async (filters: any, options: any) => {
   const { page, skip, limit, sortBy, sortOrder } =
     paginationHelper.calculatePagination(options);
   const { search, ...filterItem } = filters;
-  const addCondition:Prisma.DoctorWhereInput[]= [];
+  const addCondition: Prisma.DoctorWhereInput[] = [];
 
   if (search) {
     addCondition.push({
@@ -37,7 +34,7 @@ const getIntoBD = async (filters: any, options: any) => {
     isDeleted: false,
   });
 
-  const whereConditions:Prisma.DoctorWhereInput=
+  const whereConditions: Prisma.DoctorWhereInput =
     addCondition.length > 0 ? { AND: addCondition } : {};
 
   const result = await prisma.doctor.findMany({
@@ -47,22 +44,22 @@ const getIntoBD = async (filters: any, options: any) => {
     orderBy: {
       [sortBy]: sortOrder,
     },
-    include:{
-      specialities:{
-        select:{
-            specialitiesId:false,
-            doctorId:false,
-            specialities:{
-               select:{
-                  id:true,
-                  title:true,
-                  icon:true
-               }
-            }
-        }
+    include: {
+      specialities: {
+        select: {
+          specialitiesId: false,
+          doctorId: false,
+          specialities: {
+            select: {
+              id: true,
+              title: true,
+              icon: true,
+            },
+          },
+        },
       },
-    review:true
-    }
+      review: true,
+    },
   });
 
   const total = await prisma.doctor.count({ where: whereConditions });
@@ -71,35 +68,46 @@ const getIntoBD = async (filters: any, options: any) => {
     page,
     limit,
     total,
-    data: result.map(item=>({
+    data: result.map((item) => ({
       ...item,
-      specialities:item.specialities.map(item=>item.specialities)
+      specialities: item.specialities.map((item) => item.specialities),
     })),
   };
 };
+// getSingleBD
 
+const getSingleBD = async (id: string) => {
+  const result = await prisma.doctor.findUniqueOrThrow({
+    where: { id },
+   include:{
+     specialities:true,
+     review:true
+   }
+  });
+
+  return result;
+};
 
 // specialitieGetBD
-const specialitieGetBD=async(user:any)=>{
-  const doctorInfo=await prisma.doctor.findUniqueOrThrow({
-    where:{
-      email:user.email
+const specialitieGetBD = async (user: any) => {
+  const doctorInfo = await prisma.doctor.findUniqueOrThrow({
+    where: {
+      email: user.email,
     },
-    include:{
-      specialities:{
-        select:{
-            specialitiesId:false,
-            doctorId:false,
-            specialities:true
-        }
-      }
-    }
-  })
-  return doctorInfo.specialities.map(item=>({
-    ...item.specialities
-  }))
-}
-
+    include: {
+      specialities: {
+        select: {
+          specialitiesId: false,
+          doctorId: false,
+          specialities: true,
+        },
+      },
+    },
+  });
+  return doctorInfo.specialities.map((item) => ({
+    ...item.specialities,
+  }));
+};
 
 // deleteIntoDB
 const deleteIntoBD = async (id: string) => {
@@ -126,7 +134,6 @@ const deleteIntoBD = async (id: string) => {
   return result;
 };
 
-
 // softDeleteBD
 const softDeleteBD = async (id: string) => {
   const doctorInfo = await prisma.doctor.findUniqueOrThrow({
@@ -147,7 +154,7 @@ const softDeleteBD = async (id: string) => {
       },
       data: {
         status: userStatus.DELETED,
-      }
+      },
     });
     return result;
   });
@@ -156,50 +163,46 @@ const softDeleteBD = async (id: string) => {
 };
 
 // specialitieStoreBD
-const specialitieStoreBD=async(user:any,data:any)=>{
-  const doctorInfo=await prisma.doctor.findUniqueOrThrow({
-    where:{
-      email:user.email
-    }
-  })
-
-   
-
- for(const ids of data?.specialitiesId){
-      await prisma.doctorSpecialities.create({
-        data:{
-          specialitiesId:ids,
-          doctorId:doctorInfo.id
-        }
-      })
- }
-
-const result=await prisma.doctor.findUniqueOrThrow({
-  where:{
-    id:doctorInfo.id
-  },
-  include:{
-    specialities:true
-  }
-})
-return result
-}
-
-
-const updateProfileBD = async (user:any, file: any, data: any) => {
-  if (file) data.profilePhoto = file?.filename;
-
- const doctorInfo= await prisma.doctor.findUniqueOrThrow({
+const specialitieStoreBD = async (user: any, data: any) => {
+  const doctorInfo = await prisma.doctor.findUniqueOrThrow({
     where: {
       email: user.email,
     },
   });
 
-   // Delete the previous image
-  if(doctorInfo.profilePhoto?.length && file?.filename?.length) {
-    fileUploader.deleteFile(doctorInfo.profilePhoto)
+  for (const ids of data?.specialitiesId) {
+    await prisma.doctorSpecialities.create({
+      data: {
+        specialitiesId: ids,
+        doctorId: doctorInfo.id,
+      },
+    });
   }
-    
+
+  const result = await prisma.doctor.findUniqueOrThrow({
+    where: {
+      id: doctorInfo.id,
+    },
+    include: {
+      specialities: true,
+    },
+  });
+  return result;
+};
+
+const updateProfileBD = async (user: any, file: any, data: any) => {
+  if (file) data.profilePhoto = file?.filename;
+
+  const doctorInfo = await prisma.doctor.findUniqueOrThrow({
+    where: {
+      email: user.email,
+    },
+  });
+
+  // Delete the previous image
+  if (doctorInfo.profilePhoto?.length && file?.filename?.length) {
+    fileUploader.deleteFile(doctorInfo.profilePhoto);
+  }
 
   const result = await prisma.doctor.update({
     where: {
@@ -211,13 +214,12 @@ const updateProfileBD = async (user:any, file: any, data: any) => {
   return result;
 };
 
-
-
 export const doctorService = {
   getIntoBD,
+  getSingleBD,
   deleteIntoBD,
   softDeleteBD,
   updateProfileBD,
   specialitieStoreBD,
-  specialitieGetBD
+  specialitieGetBD,
 };
