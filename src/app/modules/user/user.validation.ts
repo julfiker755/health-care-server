@@ -1,6 +1,6 @@
 import { z } from "zod";
 import { Gender } from "@prisma/client";
-import {preprocessEmail, preprocessNumber, preprocessString  } from "../../errors/zod";
+import {preprocessEmail, preprocessString  } from "../../errors/zod";
 
 
 
@@ -10,7 +10,7 @@ const adminSchema = z.object({
   admin: z.object({
     email: preprocessEmail("Invalid email address"),
     name: preprocessString("Name is required"),
-    contactNumber: preprocessNumber("Invalid Number"),
+    contactNumber: preprocessString("Numberis required"),
     gender: preprocessString("Gender is required"),
     address: preprocessString("Address is required"),
   }),
