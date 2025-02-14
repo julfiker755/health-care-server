@@ -1,7 +1,7 @@
 {
   "name": "doctor-server",
   "version": "1.0.0",
-  "main": "index.js",
+  "main": "server.js",
   "scripts": {
     "build":"tsc",
     "dev": "ts-node-dev --respawn --transpile-only src/server.ts",
