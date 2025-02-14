@@ -21,7 +21,7 @@ app.use("/uploads", express.static(fileUploader.uploadsDir));
 
 app.get("/", (req: Request, res: Response) => {
   res.send({
-    message: "Server is Running 😍",
+    message: "😍Server is Running 😍",
   });
 });
 
