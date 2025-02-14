@@ -8,9 +8,9 @@ import { userRole } from "@prisma/client";
 const router = express.Router();
 
 router.get(
-  "/my-profile",
-  auth(userRole.SUPER_ADMIN, userRole.ADMIN, userRole.DOCTOR, userRole.PATIENT),
-  userController.getMyProfileBD
+  "/",
+  auth(userRole.SUPER_ADMIN, userRole.ADMIN),
+  userController.getIntoBD
 );
 
 router.post(
@@ -29,6 +29,12 @@ router.post(
   "/patient-store",
   validateRequest(userValidation.patientSchema),
   userController.insertPatientBD
+);
+
+router.get(
+  "/my-profile",
+  auth(userRole.SUPER_ADMIN, userRole.ADMIN, userRole.DOCTOR, userRole.PATIENT),
+  userController.getMyProfileBD
 );
 
 export const userRoutes = router;

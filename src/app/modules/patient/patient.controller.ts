@@ -9,7 +9,7 @@ import pink from "../../../shared/pink";
 
 
 const getIntoBD=catchAsync(async(req:Request,res:Response)=>{
-   const filters=pink(req.query,["search","name","email","address","gender"])
+    const filters=pink(req.query,["search","name","email","address","gender"])
     const options=pink(req.query,paginationField)
     const result= await patientService.getIntoBD(filters,options)
     sendResponse(res,{

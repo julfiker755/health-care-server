@@ -7,6 +7,7 @@ import { patientRoutes } from "../modules/patient/patient.routes";
 import { specialitiesRoutes } from "../modules/specialities/specialities.routes";
 
 
+
 const router=express.Router()
 
 
