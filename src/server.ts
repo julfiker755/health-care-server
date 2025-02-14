@@ -10,7 +10,7 @@ import config from "./app/config"
 async function main() {
    try{
     const server:Server=app.listen(config.port,()=>{
-        console.log(`Server is running ${config.port}`)
+        console.log(`Health Server is running ${config.port}`)
      })
    
    }catch(err:any){

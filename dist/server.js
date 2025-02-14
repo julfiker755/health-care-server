@@ -18,7 +18,7 @@ function main() {
     return __awaiter(this, void 0, void 0, function* () {
         try {
             const server = app_1.default.listen(config_1.default.port, () => {
-                console.log(`Server is running ${config_1.default.port}`);
+                console.log(`Health Server is running ${config_1.default.port}`);
             });
         }
         catch (err) {
