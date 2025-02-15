@@ -17,11 +17,11 @@ const globalErrorHander = (
 
   if (err instanceof Prisma.PrismaClientValidationError) {
     message = "Validation Error";
-    error = err.message;
+    error = err;
   } else if (err instanceof Prisma.PrismaClientKnownRequestError) {
     if (err.code === "P2002") {
       message = "Duplicate Key error";
-      error = err.meta;
+      error = err;
     }
   }
 

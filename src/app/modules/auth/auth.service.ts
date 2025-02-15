@@ -53,7 +53,6 @@ const loginAuth = async (data: authProps) => {
     config.jwt.secret as Secret,
     config.jwt.accessTokenExpiration as string
   );
-
   const refreshToken = jwtHelpers.generateToken(
     {
       email: userData.email,

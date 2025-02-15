@@ -35,7 +35,7 @@ router.post(
 );
 
 router.get(
-  "/specialities",
+  "/specialities/collect",
   auth(userRole.SUPER_ADMIN, userRole.DOCTOR),
   doctorController.specialitieGetBD
 );
