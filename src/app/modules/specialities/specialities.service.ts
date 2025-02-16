@@ -33,6 +33,8 @@ const storeGetBD = async (filters: any, options: any) => {
     },
     include: {
       doctor: {
+
+        
         select: {
           specialitiesId: false,
           doctorId: false,

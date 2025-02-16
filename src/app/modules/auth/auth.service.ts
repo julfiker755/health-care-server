@@ -1,11 +1,10 @@
+import { template } from "../../../helpers/emailTemplate";
 import ApiCustomError from "../../errors/ApiCustomError";
 import { jwtHelpers } from "../../../helpers/jwtHelpers";
 import emailSender from "../../../helpers/emailSender";
-import ApiError from "../../errors/ApiError";
 import prisma from "../../../shared/prisma";
 import { userStatus } from "@prisma/client";
 import { Secret } from "jsonwebtoken";
-import httpStatus from "http-status";
 import config from "../../config";
 import bcrypt from "bcrypt";
 
@@ -24,12 +23,14 @@ const loginAuth = async (data: authProps) => {
     },
   });
 
-  if(!userData){
-    throw new ApiCustomError("user email Error", [{
-      field: "email",
-      code: "invalid_type",
-      message: "User not found",
-    }]);
+  if (!userData) {
+    throw new ApiCustomError("user email Error", [
+      {
+        field: "email",
+        code: "invalid_type",
+        message: "User not found",
+      },
+    ]);
   }
 
   const isCorrectPassword: Boolean = await bcrypt.compare(
@@ -38,11 +39,13 @@ const loginAuth = async (data: authProps) => {
   );
 
   if (!isCorrectPassword) {
-    throw new ApiCustomError("user Password Error", [{
-      field: "password",
-      code: "invalid_type",
-      message: "Password is not vaild",
-    }]);
+    throw new ApiCustomError("user Password Error", [
+      {
+        field: "password",
+        code: "invalid_type",
+        message: "Password is not vaild",
+      },
+    ]);
   }
 
   const accessToken = jwtHelpers.generateToken(
@@ -68,13 +71,11 @@ const loginAuth = async (data: authProps) => {
   };
 };
 
-
-
 //   refreshToken
 const refreshToken = async (token: string) => {
   let decodedToken;
   try {
-    decodedToken = jwtHelpers.varifyToken(token, config.jwt.secret as Secret,);
+    decodedToken = jwtHelpers.varifyToken(token, config.jwt.secret as Secret);
   } catch (err) {
     throw new Error("You do not have permission.");
   }
@@ -98,8 +99,6 @@ const refreshToken = async (token: string) => {
     needPasswordChange: isUserExsis.needPasswordChange,
   };
 };
-
-
 
 // change password
 const changePassword = async (user: any, data: any) => {
@@ -130,8 +129,6 @@ const changePassword = async (user: any, data: any) => {
   return result;
 };
 
-
-
 // forgot password
 const forgotPassword = async (email: string) => {
   const userInfo = await prisma.user.findUnique({
@@ -142,91 +139,35 @@ const forgotPassword = async (email: string) => {
   });
 
   if (!userInfo) {
-    throw new ApiCustomError("user email Error", [{
-      field: "email",
-      code: "invalid_type",
-      message: "User not found",
-    }]);
+    throw new ApiCustomError("user email Error", [
+      {
+        field: "email",
+        code: "invalid_type",
+        message: "User not found",
+      },
+    ]);
   }
 
   const resetPasswordToken = jwtHelpers.generateToken(
     {
+      id: userInfo.id,
       email: userInfo.email,
       role: userInfo.role,
     },
     config.jwt.secret as Secret,
-    config.jwt.resetTokenExpiration
+    config.jwt.resetPasswordExpiration
   );
-  const resetPasswordLink =
-    config.jwt.resetPasswordLink +
-    `?userId=${userInfo.id}&token=${resetPasswordToken}`;
-  await emailSender(
-    userInfo.email,
-    `
-  <table>
-    <tr>
-        <td>
-            <table style="background-color: #f2f3f8; max-width:670px; margin:0 auto;" width="100%" border="0" align="center" cellpadding="0" cellspacing="0">
-                <tr>
-                    <td style="height:80px;">&nbsp;</td>
-                </tr>
-                <tr>
-                    <td style="height:20px;">&nbsp;</td>
-                </tr>
-                <tr>
-                    <td>
-                        <table width="95%" border="0" align="center" cellpadding="0" cellspacing="0"
-                            style="max-width:670px; background:#fff; border-radius:3px; text-align:center; 
-                            -webkit-box-shadow:0 6px 18px 0 rgba(0,0,0,.06); -moz-box-shadow:0 6px 18px 0 rgba(0,0,0,.06);
-                            box-shadow:0 6px 18px 0 rgba(0,0,0,.06);">
-                            <tr>
-                                <td style="height:40px;">&nbsp;</td>
-                            </tr>
-                            <tr>
-                                <td style="padding:0 35px;">
-                                    <h1 style="color:#1e1e2d; font-weight:500; margin:0; font-size:32px; font-family:'Rubik',sans-serif;">
-                                        You have requested to reset your password
-                                    </h1>
-                                    <span style="display:inline-block; vertical-align:middle; margin:29px 0 26px; 
-                                        border-bottom:1px solid #cecece; width:100px;">
-                                    </span>
-                                    <p style="color:#455056; font-size:15px; line-height:24px; margin:0;">
-                                        We cannot simply send you your old password. A unique link to reset your
-                                        password has been generated for you. To reset your password, click the
-                                        following link and follow the instructions.
-                                    </p>
-                                    <a href=${resetPasswordLink}
-                                        style="background:#20e277; text-decoration:none !important; font-weight:500; 
-                                        margin-top:35px; color:#fff; text-transform:uppercase; font-size:14px; 
-                                        padding:10px 24px; display:inline-block; border-radius:50px;">
-                                        Reset Password
-                                    </a>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td style="height:40px;">&nbsp;</td>
-                            </tr>
-                        </table>
-                    </td>
-                </tr>
-                <tr>
-                    <td style="height:20px;">&nbsp;</td>
-                </tr>
-                <tr>
-                    <td style="height:80px;">&nbsp;</td>
-                </tr>
-            </table>
-        </td>
-    </tr>
-</table>
 
-  `
-  );
+  const resetPasswordLink =
+    config.jwt.resetPasswordLink + `?token=${resetPasswordToken}`;
+  await emailSender(userInfo.email, template(resetPasswordLink));
 };
+
+
 
 // reset password
 const resetPassword = async (token: any, data: any) => {
-  await prisma.user.findUniqueOrThrow({
+  const userInfo = await prisma.user.findUniqueOrThrow({
     where: {
       id: data.id,
       status: userStatus.ACTIVE,
@@ -238,7 +179,13 @@ const resetPassword = async (token: any, data: any) => {
   );
 
   if (!isVaildToken) {
-    throw new ApiError(httpStatus.FORBIDDEN, "Forbidden");
+    throw new ApiCustomError("token expire", [
+      {
+        field: "token",
+        code: "invalid_type",
+        message: "Your Link is expire",
+      },
+    ]);
   }
   // hash password
   const password = await bcrypt.hash(data.password, 12);
@@ -251,6 +198,9 @@ const resetPassword = async (token: any, data: any) => {
       password,
     },
   });
+  return {
+    email: userInfo.email,
+  };
 };
 
 export const authService = {

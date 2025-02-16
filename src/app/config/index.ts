@@ -11,7 +11,7 @@ export default {
        secret:process.env.JWT_SECRET,
        accessTokenExpiration:process.env.ACCESS_TOKEN_EXPIRATION,
        refreshTokenExpiration:process.env.REFRESH_TOKEN_EXPIRATION,
-       resetTokenExpiration:process.env.RESET_TOKEN_EXPIRATION,
+       resetPasswordExpiration:process.env.RESET_PASSWORD_EXPIRATION,
        resetPasswordLink:process.env.RESET_PASSWORD_LINK,
     }
 }

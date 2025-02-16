@@ -13,7 +13,7 @@ const emailSender=async(email:string,html:string)=>{
       });
       
       const info = await transporter.sendMail({
-        from: 'PH Health Care "<info@teamrabbil.com>', // sender address
+        from: 'Health Care "<info@teamrabbil.com>', // sender address
         to:email, 
         subject: "Reset Password Link", 
         //text: "Hello world?", 
