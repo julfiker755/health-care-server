@@ -78,6 +78,16 @@ const getSingleBD=catchAsync(async(req:Request,res:Response)=>{
        data:result
     })
  })
+ const specialitieDeleteBD=catchAsync(async(req:Request & {user?:authProps},res:Response)=>{
+   const {id}=req.params
+    const result= await doctorService.specialitieDeleteBD(req.user,id)
+    sendResponse(res,{
+      statusCode:httpStatus.OK,
+      success:true,
+      message:"Specialities delete successfully",
+       data:result
+    })
+ })
 
 const updateProfileBD=catchAsync(async(req:Request & {user?:authProps},res:Response)=>{
     const user=req.user
@@ -98,5 +108,6 @@ const updateProfileBD=catchAsync(async(req:Request & {user?:authProps},res:Respo
    softDeleteBD,
    updateProfileBD,
    specialitieStoreBD,
-   specialitieGetBD
+   specialitieGetBD,
+   specialitieDeleteBD
  }

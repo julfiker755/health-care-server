@@ -39,6 +39,11 @@ router.get(
   auth(userRole.SUPER_ADMIN, userRole.DOCTOR),
   doctorController.specialitieGetBD
 );
+router.delete(
+  "/specialities/remove/:id",
+  auth(userRole.SUPER_ADMIN, userRole.DOCTOR),
+  doctorController.specialitieDeleteBD
+);
 
 router.put(
   "/update",

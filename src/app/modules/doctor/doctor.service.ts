@@ -88,26 +88,6 @@ const getSingleBD = async (id: string) => {
   return result;
 };
 
-// specialitieGetBD
-const specialitieGetBD = async (user: any) => {
-  const doctorInfo = await prisma.doctor.findUniqueOrThrow({
-    where: {
-      email: user.email,
-    },
-    include: {
-      specialities: {
-        select: {
-          specialitiesId: false,
-          doctorId: false,
-          specialities: true,
-        },
-      },
-    },
-  });
-  return doctorInfo.specialities.map((item) => ({
-    ...item.specialities,
-  }));
-};
 
 // deleteIntoDB
 const deleteIntoBD = async (id: string) => {
@@ -162,7 +142,28 @@ const softDeleteBD = async (id: string) => {
   return result;
 };
 
-// specialitieStoreBD
+// doctor specialitieGetBD
+const specialitieGetBD = async (user: any) => {
+  const doctorInfo = await prisma.doctor.findUniqueOrThrow({
+    where: {
+      email: user.email,
+    },
+    include: {
+      specialities: {
+        select: {
+          specialitiesId: false,
+          doctorId: false,
+          specialities: true,
+        },
+      },
+    },
+  });
+  return doctorInfo.specialities.map((item) => ({
+    ...item.specialities,
+  }));
+};
+
+// doctorspecialitieStoreBD
 const specialitieStoreBD = async (user: any, data: any) => {
   const doctorInfo = await prisma.doctor.findUniqueOrThrow({
     where: {
@@ -189,6 +190,29 @@ const specialitieStoreBD = async (user: any, data: any) => {
   });
   return result;
 };
+
+// doctorspecialitieDelete
+const specialitieDeleteBD=async(user:any,id:string)=>{
+  const doctorInfo = await prisma.doctor.findUniqueOrThrow({
+    where: {
+      email: user.email,
+    },
+  });
+
+  const result=await prisma.doctorSpecialities.delete({
+    where:{
+      specialitiesId_doctorId:{
+        specialitiesId:id,
+        doctorId:doctorInfo.id,
+      }
+    },
+    include:{
+      specialities:true,
+      doctor:false
+    }
+  })
+  return result?.specialities
+}
 
 const updateProfileBD = async (user: any, file: any, data: any) => {
   if (file) data.profilePhoto = file?.filename;
@@ -222,4 +246,5 @@ export const doctorService = {
   updateProfileBD,
   specialitieStoreBD,
   specialitieGetBD,
+  specialitieDeleteBD
 };

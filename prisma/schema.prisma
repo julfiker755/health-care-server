@@ -92,6 +92,7 @@ model Specialities {
   @@map("specialities")
 }
 
+
 model doctorSpecialities {
   specialitiesId String
   specialities   Specialities @relation(fields: [specialitiesId], references: [id])
