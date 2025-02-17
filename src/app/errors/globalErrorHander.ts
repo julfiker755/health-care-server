@@ -1,6 +1,7 @@
 import { Prisma } from "@prisma/client";
 import { NextFunction, Request, Response } from "express";
 import httpStatus from "http-status";
+import { TokenExpiredError } from "jsonwebtoken";
 
 const globalErrorHander = (
   err: any,
@@ -23,7 +24,13 @@ const globalErrorHander = (
       message = "Duplicate Key error";
       error = err;
     }
+  }else if(err instanceof TokenExpiredError){
+     error={
+       ...err,
+       scretCode:"R1lCfyF3XN"
+     }
   }
+  
 
   res.status(statusCode).json({
     success: success,

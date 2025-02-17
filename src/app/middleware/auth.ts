@@ -17,7 +17,6 @@ const auth=(...roles:string[])=>{
             const varifyToken=jwtHelpers.varifyToken(token,config.jwt.secret as Secret)
 
             req.user=varifyToken
-            console.log(roles)
             if(roles?.length && !roles.includes(varifyToken.role)){
                 throw new ApiError(httpStatus.FORBIDDEN,"Forbidden")
             }

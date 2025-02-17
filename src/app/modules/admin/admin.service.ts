@@ -10,7 +10,6 @@ const getIntoBD = async (filters: any, options: any) => {
     paginationHelper.calculatePagination(options);
   const { search, ...filterItem } = filters;
   const addCondition: Prisma.AdminWhereInput[]= [];
-
   if (search) {
     addCondition.push({
       OR: ["name"]?.map((field) => ({

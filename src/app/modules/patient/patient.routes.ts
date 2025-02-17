@@ -8,7 +8,7 @@ const router = express.Router()
 
 router.get(
     "/",
-    auth(userRole.SUPER_ADMIN,userRole.DOCTOR),
+    auth(userRole.SUPER_ADMIN,userRole.DOCTOR,userRole.ADMIN),
     patientController.getIntoBD
   );
   

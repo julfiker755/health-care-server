@@ -5,16 +5,8 @@ import { fileUploader } from "../../../shared/fileUploader";
 import { doctorController } from "./doctor.controller";
 const router = express.Router();
 
-router.get(
-  "/",
-  auth(userRole.SUPER_ADMIN, userRole.ADMIN),
-  doctorController.getIntoBD
-);
-router.get(
-  "/:id",
-  auth(userRole.SUPER_ADMIN, userRole.ADMIN),
-  doctorController.getSingleBD
-);
+router.get("/", doctorController.getIntoBD);
+router.get("/:id", doctorController.getSingleBD);
 
 router.delete(
   "/:id",
