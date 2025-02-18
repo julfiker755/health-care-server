@@ -62,7 +62,7 @@ const forgotPassword = (0, catchAsync_1.default)((req, res) => __awaiter(void 0,
         statusCode: http_status_1.default.OK,
         success: true,
         message: "Please check your email",
-        data: null,
+        data: { id: "31dae55e-cbe9-4f0a" },
     });
 }));
 const resetPassword = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
@@ -72,7 +72,7 @@ const resetPassword = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, 
         statusCode: http_status_1.default.OK,
         success: true,
         message: "Password change successfully",
-        data: result,
+        data: result
     });
 }));
 exports.authController = {

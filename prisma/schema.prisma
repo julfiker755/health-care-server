@@ -60,6 +60,7 @@ model Doctor {
   updatedAt           DateTime             @updatedAt
   specialities        doctorSpecialities[]
   review              Review[]
+  schedule            DoctorSchedule[]
 
   @@map("doctor")
 }
@@ -72,6 +73,8 @@ model Patient {
   profilePhoto  String?
   contactNumber String
   address       String?
+  age           Int?
+  blood         String?
   gender        Gender
   isDeleted     Boolean  @default(false)
   createdAt     DateTime @default(now())
@@ -92,7 +95,6 @@ model Specialities {
   @@map("specialities")
 }
 
-
 model doctorSpecialities {
   specialitiesId String
   specialities   Specialities @relation(fields: [specialitiesId], references: [id])
@@ -101,6 +103,31 @@ model doctorSpecialities {
 
   @@id([specialitiesId, doctorId])
   @@map("doctor_specialities")
+}
+
+model schedule {
+  id        String           @id @default(uuid())
+  date      String
+  day       String
+  startTime String
+  endTime   String
+  status    scheduleStatus   @default(UNBOOKED)
+  doctor    DoctorSchedule[]
+  createdAt DateTime         @default(now())
+  updatedAt DateTime         @updatedAt
+
+  @@map("schedule")
+}
+
+model DoctorSchedule {
+  doctorId   String
+  doctor     Doctor   @relation(fields: [doctorId], references: [id])
+  scheduleId String
+  schedule   schedule @relation(fields: [scheduleId], references: [id])
+  isBooked   Boolean  @default(false)
+
+  @@id([doctorId])
+  @@map("doctor_schedule")
 }
 
 model Review {
@@ -114,7 +141,7 @@ model Review {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  @@map("reviews")
+  @@map("review")
 }
 
 enum Gender {
@@ -133,4 +160,9 @@ enum userStatus {
   ACTIVE
   BLOCKED
   DELETED
+}
+
+enum scheduleStatus {
+  BOOKED
+  UNBOOKED
 }

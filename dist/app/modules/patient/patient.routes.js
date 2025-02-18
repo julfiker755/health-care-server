@@ -10,7 +10,7 @@ const patient_controller_1 = require("./patient.controller");
 const auth_1 = __importDefault(require("../../middleware/auth"));
 const client_1 = require("@prisma/client");
 const router = express_1.default.Router();
-router.get("/", (0, auth_1.default)(client_1.userRole.SUPER_ADMIN, client_1.userRole.DOCTOR), patient_controller_1.patientController.getIntoBD);
+router.get("/", (0, auth_1.default)(client_1.userRole.SUPER_ADMIN, client_1.userRole.DOCTOR, client_1.userRole.ADMIN), patient_controller_1.patientController.getIntoBD);
 router.delete("/:id", (0, auth_1.default)(client_1.userRole.SUPER_ADMIN, client_1.userRole.DOCTOR), patient_controller_1.patientController.deleteIntoBD);
 router.delete("/soft/:id", (0, auth_1.default)(client_1.userRole.SUPER_ADMIN, client_1.userRole.DOCTOR), patient_controller_1.patientController.softDeleteBD);
 router.put("/update", (0, auth_1.default)(client_1.userRole.SUPER_ADMIN, client_1.userRole.PATIENT), fileUploader_1.fileUploader.upload.single("file"), (req, res, next) => {

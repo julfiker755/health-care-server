@@ -1,0 +1,2 @@
+-- AlterTable
+ALTER TABLE `schedule` ADD COLUMN `status` ENUM('BOOKED', 'UNBOOKED') NOT NULL DEFAULT 'UNBOOKED';

@@ -25,7 +25,7 @@ const emailSender = (email, html) => __awaiter(void 0, void 0, void 0, function*
         tls: { rejectUnauthorized: false }
     });
     const info = yield transporter.sendMail({
-        from: 'PH Health Care "<info@teamrabbil.com>', // sender address
+        from: 'Health Care "<info@teamrabbil.com>', // sender address
         to: email,
         subject: "Reset Password Link",
         //text: "Hello world?", 

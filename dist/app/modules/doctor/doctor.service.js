@@ -30,17 +30,38 @@ const paginationHelpers_1 = require("../../../shared/paginationHelpers");
 const prisma_1 = __importDefault(require("../../../shared/prisma"));
 // getIntoBD
 const getIntoBD = (filters, options) => __awaiter(void 0, void 0, void 0, function* () {
-    var _a;
     const { page, skip, limit, sortBy, sortOrder } = paginationHelpers_1.paginationHelper.calculatePagination(options);
-    const { search } = filters, filterItem = __rest(filters, ["search"]);
+    const { search, gender, experience, speciality } = filters, filterItem = __rest(filters, ["search", "gender", "experience", "speciality"]);
     const addCondition = [];
     if (search) {
         addCondition.push({
-            OR: (_a = ["name"]) === null || _a === void 0 ? void 0 : _a.map((field) => ({
-                [field]: {
-                    contains: search === null || search === void 0 ? void 0 : search.toLowerCase(),
+            name: {
+                contains: search === null || search === void 0 ? void 0 : search.toLowerCase(),
+            },
+        });
+    }
+    if (gender) {
+        addCondition.push({
+            gender: {
+                in: [gender === null || gender === void 0 ? void 0 : gender.toUpperCase()],
+            },
+        });
+    }
+    if (experience) {
+        const exp = parseInt(experience);
+        addCondition.push({
+            experience: exp > 6 ? { gte: exp } : { lte: exp },
+        });
+    }
+    if (speciality) {
+        addCondition.push({
+            specialities: {
+                some: {
+                    specialities: {
+                        title: speciality === null || speciality === void 0 ? void 0 : speciality.toLowerCase(),
+                    },
                 },
-            })),
+            },
         });
     }
     if (Object.keys(filterItem).length > 0) {
@@ -94,28 +115,10 @@ const getSingleBD = (id) => __awaiter(void 0, void 0, void 0, function* () {
         where: { id },
         include: {
             specialities: true,
-            review: true
-        }
+            review: true,
+        },
     });
     return result;
-});
-// specialitieGetBD
-const specialitieGetBD = (user) => __awaiter(void 0, void 0, void 0, function* () {
-    const doctorInfo = yield prisma_1.default.doctor.findUniqueOrThrow({
-        where: {
-            email: user.email,
-        },
-        include: {
-            specialities: {
-                select: {
-                    specialitiesId: false,
-                    doctorId: false,
-                    specialities: true,
-                },
-            },
-        },
-    });
-    return doctorInfo.specialities.map((item) => (Object.assign({}, item.specialities)));
 });
 // deleteIntoDB
 const deleteIntoBD = (id) => __awaiter(void 0, void 0, void 0, function* () {
@@ -164,7 +167,25 @@ const softDeleteBD = (id) => __awaiter(void 0, void 0, void 0, function* () {
     }));
     return result;
 });
-// specialitieStoreBD
+// doctor specialitieGetBD
+const specialitieGetBD = (user) => __awaiter(void 0, void 0, void 0, function* () {
+    const doctorInfo = yield prisma_1.default.doctor.findUniqueOrThrow({
+        where: {
+            email: user.email,
+        },
+        include: {
+            specialities: {
+                select: {
+                    specialitiesId: false,
+                    doctorId: false,
+                    specialities: true,
+                },
+            },
+        },
+    });
+    return doctorInfo.specialities.map((item) => (Object.assign({}, item.specialities)));
+});
+// doctorspecialitieStoreBD
 const specialitieStoreBD = (user, data) => __awaiter(void 0, void 0, void 0, function* () {
     const doctorInfo = yield prisma_1.default.doctor.findUniqueOrThrow({
         where: {
@@ -188,6 +209,27 @@ const specialitieStoreBD = (user, data) => __awaiter(void 0, void 0, void 0, fun
         },
     });
     return result;
+});
+// doctorspecialitieDelete
+const specialitieDeleteBD = (user, id) => __awaiter(void 0, void 0, void 0, function* () {
+    const doctorInfo = yield prisma_1.default.doctor.findUniqueOrThrow({
+        where: {
+            email: user.email,
+        },
+    });
+    const result = yield prisma_1.default.doctorSpecialities.delete({
+        where: {
+            specialitiesId_doctorId: {
+                specialitiesId: id,
+                doctorId: doctorInfo.id,
+            },
+        },
+        include: {
+            specialities: true,
+            doctor: false,
+        },
+    });
+    return result === null || result === void 0 ? void 0 : result.specialities;
 });
 const updateProfileBD = (user, file, data) => __awaiter(void 0, void 0, void 0, function* () {
     var _a, _b;
@@ -218,4 +260,5 @@ exports.doctorService = {
     updateProfileBD,
     specialitieStoreBD,
     specialitieGetBD,
+    specialitieDeleteBD,
 };

@@ -5,6 +5,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const client_1 = require("@prisma/client");
 const http_status_1 = __importDefault(require("http-status"));
+const jsonwebtoken_1 = require("jsonwebtoken");
 const globalErrorHander = (err, req, res, next) => {
     let statusCode = http_status_1.default.INTERNAL_SERVER_ERROR;
     let success = false;
@@ -12,13 +13,16 @@ const globalErrorHander = (err, req, res, next) => {
     let error = err;
     if (err instanceof client_1.Prisma.PrismaClientValidationError) {
         message = "Validation Error";
-        error = err.message;
+        error = err;
     }
     else if (err instanceof client_1.Prisma.PrismaClientKnownRequestError) {
         if (err.code === "P2002") {
             message = "Duplicate Key error";
-            error = err.meta;
+            error = err;
         }
+    }
+    else if (err instanceof jsonwebtoken_1.TokenExpiredError) {
+        error = Object.assign(Object.assign({}, err), { scretCode: "R1lCfyF3XN" });
     }
     res.status(statusCode).json({
         success: success,

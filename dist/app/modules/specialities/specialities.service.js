@@ -16,6 +16,7 @@ exports.specialitiesService = void 0;
 const fileUploader_1 = require("../../../shared/fileUploader");
 const prisma_1 = __importDefault(require("../../../shared/prisma"));
 const paginationHelpers_1 = require("../../../shared/paginationHelpers");
+// storeGetBD
 const storeGetBD = (filters, options) => __awaiter(void 0, void 0, void 0, function* () {
     const { page, skip, limit, sortBy, sortOrder } = paginationHelpers_1.paginationHelper.calculatePagination(options);
     const { search } = filters;
@@ -59,21 +60,21 @@ const storeGetBD = (filters, options) => __awaiter(void 0, void 0, void 0, funct
                             currentWorkingPlace: true,
                             designation: true,
                             averageRating: true,
-                            isDeleted: true
-                        }
-                    }
-                }
-            }
-        }
+                            isDeleted: true,
+                        },
+                    },
+                },
+            },
+        },
     });
     const total = yield prisma_1.default.specialities.count({
-        where: whereConditions
+        where: whereConditions,
     });
     return {
         page,
         limit,
         total,
-        data: result.map((item) => (Object.assign(Object.assign({}, item), { doctor: item.doctor.map(item => item.doctor) }))),
+        data: result.map((item) => (Object.assign(Object.assign({}, item), { doctor: item.doctor.map((item) => item.doctor) }))),
     };
 });
 const storeSpceialitiesBD = (file, data) => __awaiter(void 0, void 0, void 0, function* () {
@@ -84,6 +85,7 @@ const storeSpceialitiesBD = (file, data) => __awaiter(void 0, void 0, void 0, fu
     });
     return result;
 });
+// deleteSpceialitiesBD
 const deleteSpceialitiesBD = (id) => __awaiter(void 0, void 0, void 0, function* () {
     var _a;
     const specialitiesInfo = yield prisma_1.default.specialities.findUniqueOrThrow({
@@ -94,11 +96,33 @@ const deleteSpceialitiesBD = (id) => __awaiter(void 0, void 0, void 0, function*
     if (!!((_a = specialitiesInfo.icon) === null || _a === void 0 ? void 0 : _a.length)) {
         fileUploader_1.fileUploader.deleteFile(specialitiesInfo.icon);
     }
-    const result = yield prisma_1.default.specialities.delete({
-        where: { id },
+    // doctorpecialities  find the all database
+    const doctorpecialities = yield prisma_1.default.doctorSpecialities.findMany({
+        where: {
+            specialitiesId: id,
+        },
     });
+    const result = yield prisma_1.default.$transaction((tx) => __awaiter(void 0, void 0, void 0, function* () {
+        if ((doctorpecialities === null || doctorpecialities === void 0 ? void 0 : doctorpecialities.length) > 0) {
+            for (const specialty of doctorpecialities) {
+                yield tx.doctorSpecialities.delete({
+                    where: {
+                        specialitiesId_doctorId: {
+                            doctorId: specialty.doctorId,
+                            specialitiesId: specialty.specialitiesId,
+                        },
+                    },
+                });
+            }
+        }
+        const result = yield tx.specialities.delete({
+            where: { id },
+        });
+        return result;
+    }));
     return result;
 });
+// updateSpceialitiesBD
 const updateSpceialitiesBD = (file, data, id) => __awaiter(void 0, void 0, void 0, function* () {
     var _a, _b;
     if (file)

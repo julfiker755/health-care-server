@@ -20,7 +20,7 @@ const http_status_1 = __importDefault(require("http-status"));
 const doctor_service_1 = require("./doctor.service");
 const pink_1 = __importDefault(require("../../../shared/pink"));
 const getIntoBD = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const filters = (0, pink_1.default)(req.query, ["search", "name", "email", "address", "gender"]);
+    const filters = (0, pink_1.default)(req.query, ["search", "email", "gender", "experience", "speciality"]);
     const options = (0, pink_1.default)(req.query, types_1.paginationField);
     const result = yield doctor_service_1.doctorService.getIntoBD(filters, options);
     (0, sendResponse_1.default)(res, {
@@ -85,6 +85,16 @@ const specialitieGetBD = (0, catchAsync_1.default)((req, res) => __awaiter(void 
         data: result
     });
 }));
+const specialitieDeleteBD = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const { id } = req.params;
+    const result = yield doctor_service_1.doctorService.specialitieDeleteBD(req.user, id);
+    (0, sendResponse_1.default)(res, {
+        statusCode: http_status_1.default.OK,
+        success: true,
+        message: "Specialities delete successfully",
+        data: result
+    });
+}));
 const updateProfileBD = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const user = req.user;
     const result = yield doctor_service_1.doctorService.updateProfileBD(user, req.file, req.body);
@@ -102,5 +112,6 @@ exports.doctorController = {
     softDeleteBD,
     updateProfileBD,
     specialitieStoreBD,
-    specialitieGetBD
+    specialitieGetBD,
+    specialitieDeleteBD
 };

@@ -36,9 +36,7 @@ const patientSchema = zod_1.z.object({
         email: zod_1.z.string().email("Email is required"),
         name: zod_1.z.string().min(1, "Name is required"),
         gender: zod_1.z.enum([client_1.Gender.MALE, client_1.Gender.FEMALE]),
-        contactNumber: zod_1.z
-            .string()
-            .regex(/^\+\d{10,15}$/, "Invalid contact number format"),
+        contactNumber: zod_1.z.string().min(10, { message: 'Phone number must 10 digits' }),
         address: zod_1.z.string().optional(),
     }),
 });

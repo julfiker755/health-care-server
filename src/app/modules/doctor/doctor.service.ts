@@ -105,12 +105,19 @@ const getSingleBD = async (id: string) => {
   const result = await prisma.doctor.findUniqueOrThrow({
     where: { id },
     include: {
-      specialities: true,
+      specialities:{
+        select:{
+           specialities:true
+        }
+      },
       review: true,
     },
   });
 
-  return result;
+  return {
+    ...result,
+    specialities: result.specialities.map((item) => item.specialities),
+  };
 };
 
 // deleteIntoDB
@@ -240,7 +247,6 @@ const specialitieDeleteBD = async (user: any, id: string) => {
 
 const updateProfileBD = async (user: any, file: any, data: any) => {
   if (file) data.profilePhoto = file?.filename;
-
   const doctorInfo = await prisma.doctor.findUniqueOrThrow({
     where: {
       email: user.email,

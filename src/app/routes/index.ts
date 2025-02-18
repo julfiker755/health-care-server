@@ -1,11 +1,12 @@
 import express from "express";
+import { aiRoutes } from "../modules/ai/ai.routes";
 import { userRoutes } from "../modules/user/user.routes";
 import { authRoutes } from "../modules/auth/auth.routes";
 import { adminRoutes } from "../modules/admin/admin.routes";
 import { doctorRoutes } from "../modules/doctor/doctor.routes";
 import { patientRoutes } from "../modules/patient/patient.routes";
 import { specialitiesRoutes } from "../modules/specialities/specialities.routes";
-import { aiRoutes } from "../modules/ai/ai.routes";
+import { scheduleRoutes } from "../modules/schedule/schedule.routes";
 
 
 const router=express.Router()
@@ -31,6 +32,9 @@ const moduleRoutes=[
     },{
         path:"/specialities",
         route:specialitiesRoutes
+    },{
+        path:"/schedule",
+        route:scheduleRoutes
     },{
         path:"/ai",
         route:aiRoutes
