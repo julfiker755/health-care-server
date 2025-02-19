@@ -1,13 +1,13 @@
 import { Request, Response } from "express";
 import catchAsync from "../../../shared/catchAsync";
 import sendResponse from "../../../shared/sendResponse";
-import { authProps, paginationField } from "../../../types";
+import {paginationField } from "../../../types";
 import httpStatus from "http-status";
 import pink from "../../../shared/pink";
 import { scheduleService } from "./schedule.service";
 
 const getIntoBD = catchAsync(async (req: Request, res: Response) => {
-  const filters = pink(req.query, ["status"]);
+  const filters = pink(req.query, ["status","search"]);
   const options = pink(req.query, paginationField);
   const result = await scheduleService.getIntoBD(filters, options);
   sendResponse(res, {

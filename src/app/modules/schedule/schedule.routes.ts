@@ -6,7 +6,7 @@ const router = express.Router();
 
 router.get(
   "/",
-  auth(userRole.SUPER_ADMIN, userRole.ADMIN),
+  auth(userRole.SUPER_ADMIN, userRole.ADMIN,userRole.DOCTOR),
   scheduleController.getIntoBD
 );
 router.post(

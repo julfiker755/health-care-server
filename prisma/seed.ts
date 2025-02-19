@@ -19,7 +19,7 @@ const seedSuperAdmin = async () => {
 
     const superAdminData = await prisma.user.create({
       data: {
-        email: "super@gmail.com",
+        email: "super@demo.com",
         password: hashedPassword,
         role: userRole.SUPER_ADMIN,
         admin: {
@@ -33,7 +33,7 @@ const seedSuperAdmin = async () => {
       },
     });
 
-    console.log(superAdminData);
+    console.log("Super Admin Create Successfull");
   } catch (error:any) {
     console.error(error);
   } finally {

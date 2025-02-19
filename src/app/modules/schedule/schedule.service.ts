@@ -10,8 +10,18 @@ import { format } from "date-fns";
 const getIntoBD = async (filters: any, options: any) => {
   const { page, skip, limit, sortBy, sortOrder } =
     paginationHelper.calculatePagination(options);
-  const { status} = filters;
+  const { status,search} = filters;
   const addCondition:Prisma.scheduleWhereInput[]= [];
+
+  if (search) {
+    addCondition.push({
+      OR: ["date"].map((field) => ({
+        [field]: {
+          contains: search?.toLowerCase(),
+        },
+      })),
+    });
+  }
 
   if (status) {
     addCondition.push({
