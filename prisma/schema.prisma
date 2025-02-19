@@ -60,7 +60,7 @@ model Doctor {
   updatedAt           DateTime             @updatedAt
   specialities        doctorSpecialities[]
   review              Review[]
-  schedule            DoctorSchedule[]
+  schedule            doctorSchedule[]
 
   @@map("doctor")
 }
@@ -112,21 +112,21 @@ model schedule {
   startTime String
   endTime   String
   status    scheduleStatus   @default(UNBOOKED)
-  doctor    DoctorSchedule[]
+  doctor    doctorSchedule[]
   createdAt DateTime         @default(now())
   updatedAt DateTime         @updatedAt
 
   @@map("schedule")
 }
 
-model DoctorSchedule {
+model doctorSchedule {
   doctorId   String
   doctor     Doctor   @relation(fields: [doctorId], references: [id])
   scheduleId String
   schedule   schedule @relation(fields: [scheduleId], references: [id])
   isBooked   Boolean  @default(false)
 
-  @@id([doctorId])
+  @@id([doctorId,scheduleId])
   @@map("doctor_schedule")
 }
 

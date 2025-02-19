@@ -36,7 +36,21 @@ router.delete(
   auth(userRole.SUPER_ADMIN, userRole.DOCTOR),
   doctorController.specialitieDeleteBD
 );
-
+router.get(
+  "/my-schedule/collect",
+  auth(userRole.SUPER_ADMIN, userRole.DOCTOR),
+  doctorController.scheduleGetBD
+);
+router.post(
+  "/schedule-store",
+  auth(userRole.SUPER_ADMIN, userRole.DOCTOR),
+  doctorController.scheduleStoreBD
+);
+router.delete(
+  "/schedule/remove/:id",
+  auth(userRole.SUPER_ADMIN, userRole.DOCTOR),
+  doctorController.scheduleDeleteBD
+);
 router.put(
   "/update",
   auth(userRole.SUPER_ADMIN, userRole.DOCTOR),

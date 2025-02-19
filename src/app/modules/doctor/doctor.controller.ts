@@ -57,6 +57,17 @@ const getSingleBD=catchAsync(async(req:Request,res:Response)=>{
     })
  })
 
+ const updateProfileBD=catchAsync(async(req:Request & {user?:authProps},res:Response)=>{
+   const user=req.user
+   const result= await doctorService.updateProfileBD(user,req.file,req.body)
+   sendResponse(res,{
+     statusCode:httpStatus.OK,
+     success:true,
+     message:"Profile Update successfully",
+     data:result
+   })
+})
+
  const specialitieStoreBD=catchAsync(async(req:Request & {user?:authProps},res:Response)=>{
     const user=req.user
     const result= await doctorService.specialitieStoreBD(user,req.body)
@@ -89,16 +100,38 @@ const getSingleBD=catchAsync(async(req:Request,res:Response)=>{
     })
  })
 
-const updateProfileBD=catchAsync(async(req:Request & {user?:authProps},res:Response)=>{
-    const user=req.user
-    const result= await doctorService.updateProfileBD(user,req.file,req.body)
-    sendResponse(res,{
-      statusCode:httpStatus.OK,
-      success:true,
-      message:"Profile Update successfully",
+ const scheduleStoreBD=catchAsync(async(req:Request & {user?:authProps},res:Response)=>{
+   const user=req.user
+   const result= await doctorService.scheduleStoreBD(user,req.body)
+   sendResponse(res,{
+     statusCode:httpStatus.OK,
+     success:true,
+     message:"Doctor schedule create successfull",
       data:result
-    })
- })
+   })
+})
+const scheduleGetBD=catchAsync(async(req:Request & {user?:authProps},res:Response)=>{
+   const user=req.user
+   const result= await doctorService.scheduleGetBD(user)
+   sendResponse(res,{
+     statusCode:httpStatus.OK,
+     success:true,
+     message:"My schedule Info successfull",
+      data:result
+   })
+})
+ const scheduleDeleteBD=catchAsync(async(req:Request & {user?:authProps},res:Response)=>{
+   const {id}=req.params
+   const result= await doctorService.scheduleDeleteBD(req.user,id)
+   sendResponse(res,{
+     statusCode:httpStatus.OK,
+     success:true,
+     message:"schedule delete successfull",
+      data:result
+   })
+})
+
+
 
 
  export const doctorController={
@@ -109,5 +142,8 @@ const updateProfileBD=catchAsync(async(req:Request & {user?:authProps},res:Respo
    updateProfileBD,
    specialitieStoreBD,
    specialitieGetBD,
-   specialitieDeleteBD
+   specialitieDeleteBD,
+   scheduleGetBD,
+   scheduleStoreBD,
+   scheduleDeleteBD
  }

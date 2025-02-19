@@ -1,4 +1,4 @@
-import { Prisma, userStatus } from "@prisma/client";
+import { Prisma, scheduleStatus, userStatus } from "@prisma/client";
 import { fileUploader } from "../../../shared/fileUploader";
 import { paginationHelper } from "../../../shared/paginationHelpers";
 import prisma from "../../../shared/prisma";
@@ -105,10 +105,15 @@ const getSingleBD = async (id: string) => {
   const result = await prisma.doctor.findUniqueOrThrow({
     where: { id },
     include: {
-      specialities:{
-        select:{
-           specialities:true
-        }
+      specialities: {
+        select: {
+          specialities: true,
+        },
+      },
+      schedule: {
+        select: {
+          schedule: true,
+        },
       },
       review: true,
     },
@@ -117,6 +122,7 @@ const getSingleBD = async (id: string) => {
   return {
     ...result,
     specialities: result.specialities.map((item) => item.specialities),
+    schedule: result.schedule.map((item) => item.schedule),
   };
 };
 
@@ -168,6 +174,30 @@ const softDeleteBD = async (id: string) => {
       },
     });
     return result;
+  });
+
+  return result;
+};
+
+// updateProfileBD
+const updateProfileBD = async (user: any, file: any, data: any) => {
+  if (file) data.profilePhoto = file?.filename;
+  const doctorInfo = await prisma.doctor.findUniqueOrThrow({
+    where: {
+      email: user.email,
+    },
+  });
+
+  // Delete the previous image
+  if (doctorInfo.profilePhoto?.length && file?.filename?.length) {
+    fileUploader.deleteFile(doctorInfo.profilePhoto);
+  }
+
+  const result = await prisma.doctor.update({
+    where: {
+      email: user.email,
+    },
+    data: data,
   });
 
   return result;
@@ -245,27 +275,102 @@ const specialitieDeleteBD = async (user: any, id: string) => {
   return result?.specialities;
 };
 
-const updateProfileBD = async (user: any, file: any, data: any) => {
-  if (file) data.profilePhoto = file?.filename;
+// scheduleGetBD
+const scheduleGetBD = async (user: any) => {
+  const doctorInfo = await prisma.doctor.findUniqueOrThrow({
+    where: {
+      email: user.email,
+    },
+    include: {
+      schedule: {
+        select: {
+          schedule: true,
+        },
+      },
+    },
+  });
+
+  return doctorInfo.schedule.map((item) => ({
+    ...item.schedule,
+  }));
+};
+// scheduleStoreBD
+const scheduleStoreBD = async (user: any, data: any) => {
   const doctorInfo = await prisma.doctor.findUniqueOrThrow({
     where: {
       email: user.email,
     },
   });
 
-  // Delete the previous image
-  if (doctorInfo.profilePhoto?.length && file?.filename?.length) {
-    fileUploader.deleteFile(doctorInfo.profilePhoto);
-  }
+  await prisma.$transaction(async (tx) => {
+    for (const id of data?.scheduleId) {
+      await tx.doctorSchedule.create({
+        data: {
+          doctorId: doctorInfo.id,
+          scheduleId: id,
+        },
+      });
+    }
 
-  const result = await prisma.doctor.update({
+    for (const id of data?.scheduleId) {
+      await tx.schedule.update({
+        where: {
+          id: id,
+        },
+        data: {
+          status: scheduleStatus.BOOKED,
+        },
+      });
+    }
+  });
+
+  const result = await prisma.doctor.findUniqueOrThrow({
+    where: {
+      id: doctorInfo.id,
+    },
+    include: {
+      schedule: {
+        select: {
+          schedule: true,
+        },
+      },
+    },
+  });
+  return result.schedule.map((item) => item.schedule);
+};
+
+// scheduleDeleteBD
+const scheduleDeleteBD = async (user: any, id: string) => {
+  const doctorInfo = await prisma.doctor.findUniqueOrThrow({
     where: {
       email: user.email,
     },
-    data: data,
+  });
+  const result = await prisma.$transaction(async (tx) => {
+    const result = await tx.doctorSchedule.delete({
+      where: {
+        doctorId_scheduleId: {
+          doctorId: doctorInfo.id,
+          scheduleId: id,
+        },
+      },
+      include: {
+        doctor: false,
+        schedule: true,
+      },
+    });
+
+    await tx.schedule.update({
+      where: { id },
+      data: {
+        status: scheduleStatus.UNBOOKED,
+      },
+    });
+
+    return result;
   });
 
-  return result;
+  return result.schedule;
 };
 
 export const doctorService = {
@@ -277,4 +382,7 @@ export const doctorService = {
   specialitieStoreBD,
   specialitieGetBD,
   specialitieDeleteBD,
+  scheduleGetBD,
+  scheduleStoreBD,
+  scheduleDeleteBD,
 };
