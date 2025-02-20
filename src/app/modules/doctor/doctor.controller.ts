@@ -107,17 +107,23 @@ const getSingleBD=catchAsync(async(req:Request,res:Response)=>{
      statusCode:httpStatus.OK,
      success:true,
      message:"Doctor schedule create successfull",
-      data:result
+    data:result
    })
 })
 const scheduleGetBD=catchAsync(async(req:Request & {user?:authProps},res:Response)=>{
+   const options=pink(req.query,paginationField)
    const user=req.user
-   const result= await doctorService.scheduleGetBD(user)
+   const result= await doctorService.scheduleGetBD(user,options)
    sendResponse(res,{
      statusCode:httpStatus.OK,
      success:true,
      message:"My schedule Info successfull",
-      data:result
+     meta:{
+      page:result.page,
+      limit:result.limit,
+      total:result.total
+    },
+    data:result.data
    })
 })
  const scheduleDeleteBD=catchAsync(async(req:Request & {user?:authProps},res:Response)=>{

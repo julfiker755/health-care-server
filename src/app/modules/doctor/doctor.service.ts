@@ -2,6 +2,8 @@ import { Prisma, scheduleStatus, userStatus } from "@prisma/client";
 import { fileUploader } from "../../../shared/fileUploader";
 import { paginationHelper } from "../../../shared/paginationHelpers";
 import prisma from "../../../shared/prisma";
+import ApiError from "../../errors/ApiError";
+import httpStatus from "http-status";
 
 // getIntoBD
 const getIntoBD = async (filters: any, options: any) => {
@@ -209,19 +211,18 @@ const specialitieGetBD = async (user: any) => {
     where: {
       email: user.email,
     },
+  });
+
+  const result = await prisma.doctorSpecialities.findMany({
+    where: {
+      doctorId: doctorInfo.id,
+    },
     include: {
-      specialities: {
-        select: {
-          specialitiesId: false,
-          doctorId: false,
-          specialities: true,
-        },
-      },
+      specialities: true,
     },
   });
-  return doctorInfo.specialities.map((item) => ({
-    ...item.specialities,
-  }));
+
+  return result.map((item) => item.specialities);
 };
 
 // doctorspecialitieStoreBD
@@ -276,24 +277,52 @@ const specialitieDeleteBD = async (user: any, id: string) => {
 };
 
 // scheduleGetBD
-const scheduleGetBD = async (user: any) => {
+const scheduleGetBD = async (user: any, options: any) => {
+  const { page, skip, limit} =
+    paginationHelper.calculatePagination(options);
   const doctorInfo = await prisma.doctor.findUniqueOrThrow({
     where: {
       email: user.email,
     },
+  });
+
+  const result = await prisma.doctorSchedule.findMany({
+    where: {
+      doctorId: doctorInfo.id,
+    },
+    skip,
+    take: limit,
     include: {
       schedule: {
         select: {
-          schedule: true,
+          id: true,
+          date: true,
+          day: true,
+          startTime: true,
+          endTime: true,
+          status: false
         },
       },
     },
   });
 
-  return doctorInfo.schedule.map((item) => ({
-    ...item.schedule,
-  }));
+  const total = await prisma.doctorSchedule.count({
+    where: { doctorId: doctorInfo.id },
+  });
+
+
+  return {
+    page,
+    limit,
+    total,
+    data: result.map((item) => ({
+      ...item.schedule,
+      isBooked: item.isBooked,
+    })),
+  };
+
 };
+
 // scheduleStoreBD
 const scheduleStoreBD = async (user: any, data: any) => {
   const doctorInfo = await prisma.doctor.findUniqueOrThrow({
@@ -346,6 +375,21 @@ const scheduleDeleteBD = async (user: any, id: string) => {
       email: user.email,
     },
   });
+
+  const exsisBooking=await prisma.doctorSchedule.findUniqueOrThrow({
+    where:{
+       doctorId_scheduleId:{
+         doctorId:doctorInfo.id,
+         scheduleId:id,
+       }
+    }
+  })
+   
+  if(exsisBooking.isBooked === true){
+    throw new ApiError(httpStatus.CONFLICT,"Already Booking not Delete")
+  }
+ 
+
   const result = await prisma.$transaction(async (tx) => {
     const result = await tx.doctorSchedule.delete({
       where: {
