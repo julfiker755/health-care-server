@@ -4,13 +4,14 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
+const ai_routes_1 = require("../modules/ai/ai.routes");
 const user_routes_1 = require("../modules/user/user.routes");
 const auth_routes_1 = require("../modules/auth/auth.routes");
 const admin_routes_1 = require("../modules/admin/admin.routes");
 const doctor_routes_1 = require("../modules/doctor/doctor.routes");
 const patient_routes_1 = require("../modules/patient/patient.routes");
 const specialities_routes_1 = require("../modules/specialities/specialities.routes");
-const ai_routes_1 = require("../modules/ai/ai.routes");
+const schedule_routes_1 = require("../modules/schedule/schedule.routes");
 const router = express_1.default.Router();
 const moduleRoutes = [
     {
@@ -31,6 +32,9 @@ const moduleRoutes = [
     }, {
         path: "/specialities",
         route: specialities_routes_1.specialitiesRoutes
+    }, {
+        path: "/schedule",
+        route: schedule_routes_1.scheduleRoutes
     }, {
         path: "/ai",
         route: ai_routes_1.aiRoutes

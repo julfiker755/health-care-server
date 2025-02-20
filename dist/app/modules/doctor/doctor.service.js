@@ -28,6 +28,8 @@ const client_1 = require("@prisma/client");
 const fileUploader_1 = require("../../../shared/fileUploader");
 const paginationHelpers_1 = require("../../../shared/paginationHelpers");
 const prisma_1 = __importDefault(require("../../../shared/prisma"));
+const ApiError_1 = __importDefault(require("../../errors/ApiError"));
+const http_status_1 = __importDefault(require("http-status"));
 // getIntoBD
 const getIntoBD = (filters, options) => __awaiter(void 0, void 0, void 0, function* () {
     const { page, skip, limit, sortBy, sortOrder } = paginationHelpers_1.paginationHelper.calculatePagination(options);
@@ -114,11 +116,20 @@ const getSingleBD = (id) => __awaiter(void 0, void 0, void 0, function* () {
     const result = yield prisma_1.default.doctor.findUniqueOrThrow({
         where: { id },
         include: {
-            specialities: true,
+            specialities: {
+                select: {
+                    specialities: true,
+                },
+            },
+            schedule: {
+                select: {
+                    schedule: true,
+                },
+            },
             review: true,
         },
     });
-    return result;
+    return Object.assign(Object.assign({}, result), { specialities: result.specialities.map((item) => item.specialities), schedule: result.schedule.map((item) => item.schedule) });
 });
 // deleteIntoDB
 const deleteIntoBD = (id) => __awaiter(void 0, void 0, void 0, function* () {
@@ -167,23 +178,44 @@ const softDeleteBD = (id) => __awaiter(void 0, void 0, void 0, function* () {
     }));
     return result;
 });
+// updateProfileBD
+const updateProfileBD = (user, file, data) => __awaiter(void 0, void 0, void 0, function* () {
+    var _a, _b;
+    if (file)
+        data.profilePhoto = file === null || file === void 0 ? void 0 : file.filename;
+    const doctorInfo = yield prisma_1.default.doctor.findUniqueOrThrow({
+        where: {
+            email: user.email,
+        },
+    });
+    // Delete the previous image
+    if (((_a = doctorInfo.profilePhoto) === null || _a === void 0 ? void 0 : _a.length) && ((_b = file === null || file === void 0 ? void 0 : file.filename) === null || _b === void 0 ? void 0 : _b.length)) {
+        fileUploader_1.fileUploader.deleteFile(doctorInfo.profilePhoto);
+    }
+    const result = yield prisma_1.default.doctor.update({
+        where: {
+            email: user.email,
+        },
+        data: data,
+    });
+    return result;
+});
 // doctor specialitieGetBD
 const specialitieGetBD = (user) => __awaiter(void 0, void 0, void 0, function* () {
     const doctorInfo = yield prisma_1.default.doctor.findUniqueOrThrow({
         where: {
             email: user.email,
         },
+    });
+    const result = yield prisma_1.default.doctorSpecialities.findMany({
+        where: {
+            doctorId: doctorInfo.id,
+        },
         include: {
-            specialities: {
-                select: {
-                    specialitiesId: false,
-                    doctorId: false,
-                    specialities: true,
-                },
-            },
+            specialities: true,
         },
     });
-    return doctorInfo.specialities.map((item) => (Object.assign({}, item.specialities)));
+    return result.map((item) => item.specialities);
 });
 // doctorspecialitieStoreBD
 const specialitieStoreBD = (user, data) => __awaiter(void 0, void 0, void 0, function* () {
@@ -231,26 +263,124 @@ const specialitieDeleteBD = (user, id) => __awaiter(void 0, void 0, void 0, func
     });
     return result === null || result === void 0 ? void 0 : result.specialities;
 });
-const updateProfileBD = (user, file, data) => __awaiter(void 0, void 0, void 0, function* () {
-    var _a, _b;
-    if (file)
-        data.profilePhoto = file === null || file === void 0 ? void 0 : file.filename;
+// scheduleGetBD
+const scheduleGetBD = (user, options) => __awaiter(void 0, void 0, void 0, function* () {
+    const { page, skip, limit } = paginationHelpers_1.paginationHelper.calculatePagination(options);
     const doctorInfo = yield prisma_1.default.doctor.findUniqueOrThrow({
         where: {
             email: user.email,
         },
     });
-    // Delete the previous image
-    if (((_a = doctorInfo.profilePhoto) === null || _a === void 0 ? void 0 : _a.length) && ((_b = file === null || file === void 0 ? void 0 : file.filename) === null || _b === void 0 ? void 0 : _b.length)) {
-        fileUploader_1.fileUploader.deleteFile(doctorInfo.profilePhoto);
-    }
-    const result = yield prisma_1.default.doctor.update({
+    const result = yield prisma_1.default.doctorSchedule.findMany({
+        where: {
+            doctorId: doctorInfo.id,
+        },
+        skip,
+        take: limit,
+        include: {
+            schedule: {
+                select: {
+                    id: true,
+                    date: true,
+                    day: true,
+                    startTime: true,
+                    endTime: true,
+                    status: false
+                },
+            },
+        },
+    });
+    const total = yield prisma_1.default.doctorSchedule.count({
+        where: { doctorId: doctorInfo.id },
+    });
+    return {
+        page,
+        limit,
+        total,
+        data: result.map((item) => (Object.assign(Object.assign({}, item.schedule), { isBooked: item.isBooked }))),
+    };
+});
+// scheduleStoreBD
+const scheduleStoreBD = (user, data) => __awaiter(void 0, void 0, void 0, function* () {
+    const doctorInfo = yield prisma_1.default.doctor.findUniqueOrThrow({
         where: {
             email: user.email,
         },
-        data: data,
     });
-    return result;
+    yield prisma_1.default.$transaction((tx) => __awaiter(void 0, void 0, void 0, function* () {
+        for (const id of data === null || data === void 0 ? void 0 : data.scheduleId) {
+            yield tx.doctorSchedule.create({
+                data: {
+                    doctorId: doctorInfo.id,
+                    scheduleId: id,
+                },
+            });
+        }
+        for (const id of data === null || data === void 0 ? void 0 : data.scheduleId) {
+            yield tx.schedule.update({
+                where: {
+                    id: id,
+                },
+                data: {
+                    status: client_1.scheduleStatus.BOOKED,
+                },
+            });
+        }
+    }));
+    const result = yield prisma_1.default.doctor.findUniqueOrThrow({
+        where: {
+            id: doctorInfo.id,
+        },
+        include: {
+            schedule: {
+                select: {
+                    schedule: true,
+                },
+            },
+        },
+    });
+    return result.schedule.map((item) => item.schedule);
+});
+// scheduleDeleteBD
+const scheduleDeleteBD = (user, id) => __awaiter(void 0, void 0, void 0, function* () {
+    const doctorInfo = yield prisma_1.default.doctor.findUniqueOrThrow({
+        where: {
+            email: user.email,
+        },
+    });
+    const exsisBooking = yield prisma_1.default.doctorSchedule.findUniqueOrThrow({
+        where: {
+            doctorId_scheduleId: {
+                doctorId: doctorInfo.id,
+                scheduleId: id,
+            }
+        }
+    });
+    if (exsisBooking.isBooked === true) {
+        throw new ApiError_1.default(http_status_1.default.CONFLICT, "Already Booking not Delete");
+    }
+    const result = yield prisma_1.default.$transaction((tx) => __awaiter(void 0, void 0, void 0, function* () {
+        const result = yield tx.doctorSchedule.delete({
+            where: {
+                doctorId_scheduleId: {
+                    doctorId: doctorInfo.id,
+                    scheduleId: id,
+                },
+            },
+            include: {
+                doctor: false,
+                schedule: true,
+            },
+        });
+        yield tx.schedule.update({
+            where: { id },
+            data: {
+                status: client_1.scheduleStatus.UNBOOKED,
+            },
+        });
+        return result;
+    }));
+    return result.schedule;
 });
 exports.doctorService = {
     getIntoBD,
@@ -261,4 +391,7 @@ exports.doctorService = {
     specialitieStoreBD,
     specialitieGetBD,
     specialitieDeleteBD,
+    scheduleGetBD,
+    scheduleStoreBD,
+    scheduleDeleteBD,
 };

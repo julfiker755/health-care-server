@@ -45,7 +45,7 @@ CREATE TABLE `doctor` (
     `qualification` VARCHAR(191) NOT NULL,
     `currentWorkingPlace` VARCHAR(191) NOT NULL,
     `designation` VARCHAR(191) NOT NULL,
-    `averageRating` DOUBLE NOT NULL,
+    `averageRating` DOUBLE NULL DEFAULT 0,
     `isDeleted` BOOLEAN NOT NULL DEFAULT false,
     `createdAt` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
     `updatedAt` DATETIME(3) NOT NULL,
@@ -62,6 +62,8 @@ CREATE TABLE `patient` (
     `profilePhoto` VARCHAR(191) NULL,
     `contactNumber` VARCHAR(191) NOT NULL,
     `address` VARCHAR(191) NULL,
+    `age` INTEGER NULL,
+    `blood` VARCHAR(191) NULL,
     `gender` ENUM('MALE', 'FEMALE') NOT NULL,
     `isDeleted` BOOLEAN NOT NULL DEFAULT false,
     `createdAt` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
@@ -91,7 +93,30 @@ CREATE TABLE `doctor_specialities` (
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
 -- CreateTable
-CREATE TABLE `reviews` (
+CREATE TABLE `schedule` (
+    `id` VARCHAR(191) NOT NULL,
+    `date` VARCHAR(191) NOT NULL,
+    `day` VARCHAR(191) NOT NULL,
+    `startTime` VARCHAR(191) NOT NULL,
+    `endTime` VARCHAR(191) NOT NULL,
+    `status` ENUM('BOOKED', 'UNBOOKED') NOT NULL DEFAULT 'UNBOOKED',
+    `createdAt` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
+    `updatedAt` DATETIME(3) NOT NULL,
+
+    PRIMARY KEY (`id`)
+) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+
+-- CreateTable
+CREATE TABLE `doctor_schedule` (
+    `doctorId` VARCHAR(191) NOT NULL,
+    `scheduleId` VARCHAR(191) NOT NULL,
+    `isBooked` BOOLEAN NOT NULL DEFAULT false,
+
+    PRIMARY KEY (`doctorId`, `scheduleId`)
+) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+
+-- CreateTable
+CREATE TABLE `review` (
     `id` VARCHAR(191) NOT NULL,
     `patientId` VARCHAR(191) NOT NULL,
     `doctorId` VARCHAR(191) NOT NULL,
@@ -119,7 +144,13 @@ ALTER TABLE `doctor_specialities` ADD CONSTRAINT `doctor_specialities_specialiti
 ALTER TABLE `doctor_specialities` ADD CONSTRAINT `doctor_specialities_doctorId_fkey` FOREIGN KEY (`doctorId`) REFERENCES `doctor`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE `reviews` ADD CONSTRAINT `reviews_patientId_fkey` FOREIGN KEY (`patientId`) REFERENCES `patient`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE `doctor_schedule` ADD CONSTRAINT `doctor_schedule_doctorId_fkey` FOREIGN KEY (`doctorId`) REFERENCES `doctor`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE `reviews` ADD CONSTRAINT `reviews_doctorId_fkey` FOREIGN KEY (`doctorId`) REFERENCES `doctor`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE `doctor_schedule` ADD CONSTRAINT `doctor_schedule_scheduleId_fkey` FOREIGN KEY (`scheduleId`) REFERENCES `schedule`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE `review` ADD CONSTRAINT `review_patientId_fkey` FOREIGN KEY (`patientId`) REFERENCES `patient`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE `review` ADD CONSTRAINT `review_doctorId_fkey` FOREIGN KEY (`doctorId`) REFERENCES `doctor`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;

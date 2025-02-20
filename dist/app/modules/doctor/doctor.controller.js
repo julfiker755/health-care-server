@@ -65,6 +65,16 @@ const softDeleteBD = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, v
         data: result
     });
 }));
+const updateProfileBD = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const user = req.user;
+    const result = yield doctor_service_1.doctorService.updateProfileBD(user, req.file, req.body);
+    (0, sendResponse_1.default)(res, {
+        statusCode: http_status_1.default.OK,
+        success: true,
+        message: "Profile Update successfully",
+        data: result
+    });
+}));
 const specialitieStoreBD = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const user = req.user;
     const result = yield doctor_service_1.doctorService.specialitieStoreBD(user, req.body);
@@ -95,13 +105,39 @@ const specialitieDeleteBD = (0, catchAsync_1.default)((req, res) => __awaiter(vo
         data: result
     });
 }));
-const updateProfileBD = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
+const scheduleStoreBD = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const user = req.user;
-    const result = yield doctor_service_1.doctorService.updateProfileBD(user, req.file, req.body);
+    const result = yield doctor_service_1.doctorService.scheduleStoreBD(user, req.body);
     (0, sendResponse_1.default)(res, {
         statusCode: http_status_1.default.OK,
         success: true,
-        message: "Profile Update successfully",
+        message: "Doctor schedule create successfull",
+        data: result
+    });
+}));
+const scheduleGetBD = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const options = (0, pink_1.default)(req.query, types_1.paginationField);
+    const user = req.user;
+    const result = yield doctor_service_1.doctorService.scheduleGetBD(user, options);
+    (0, sendResponse_1.default)(res, {
+        statusCode: http_status_1.default.OK,
+        success: true,
+        message: "My schedule Info successfull",
+        meta: {
+            page: result.page,
+            limit: result.limit,
+            total: result.total
+        },
+        data: result.data
+    });
+}));
+const scheduleDeleteBD = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const { id } = req.params;
+    const result = yield doctor_service_1.doctorService.scheduleDeleteBD(req.user, id);
+    (0, sendResponse_1.default)(res, {
+        statusCode: http_status_1.default.OK,
+        success: true,
+        message: "schedule delete successfull",
         data: result
     });
 }));
@@ -113,5 +149,8 @@ exports.doctorController = {
     updateProfileBD,
     specialitieStoreBD,
     specialitieGetBD,
-    specialitieDeleteBD
+    specialitieDeleteBD,
+    scheduleGetBD,
+    scheduleStoreBD,
+    scheduleDeleteBD
 };

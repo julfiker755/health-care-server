@@ -1,3 +1,0 @@
--- AlterTable
-ALTER TABLE `patient` ADD COLUMN `age` INTEGER NULL,
-    ADD COLUMN `blood` VARCHAR(191) NULL;
