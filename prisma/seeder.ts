@@ -474,6 +474,7 @@ const spceialitiesData = [
   },
 ];
 
+
 const seederData = async () => {
   try {
     // **admin**
