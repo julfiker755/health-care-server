@@ -61,14 +61,16 @@ model Doctor {
   specialities        doctorSpecialities[]
   review              Review[]
   schedule            doctorSchedule[]
+  appointment         Appointment[]
+  prescription        Prescription[]
 
   @@map("doctor")
 }
 
 model Patient {
-  id            String   @id @default(uuid())
-  email         String   @unique
-  patient       User     @relation(fields: [email], references: [email])
+  id            String         @id @default(uuid())
+  email         String         @unique
+  patient       User           @relation(fields: [email], references: [email])
   name          String
   profilePhoto  String?
   contactNumber String
@@ -76,10 +78,12 @@ model Patient {
   age           Int?
   blood         String?
   gender        Gender
-  isDeleted     Boolean  @default(false)
-  createdAt     DateTime @default(now())
-  updatedAt     DateTime @updatedAt
+  isDeleted     Boolean        @default(false)
+  createdAt     DateTime       @default(now())
+  updatedAt     DateTime       @updatedAt
   review        Review[]
+  appointment   Appointment[]
+  prescription  Prescription[]
 
   @@map("patient")
 }
@@ -105,29 +109,66 @@ model doctorSpecialities {
   @@map("doctor_specialities")
 }
 
-model schedule {
-  id        String           @id @default(uuid())
-  date      String
-  day       String
-  startTime String
-  endTime   String
-  status    scheduleStatus   @default(UNBOOKED)
-  doctor    doctorSchedule[]
-  createdAt DateTime         @default(now())
-  updatedAt DateTime         @updatedAt
+model Schedule {
+  id          String           @id @default(uuid())
+  date        String
+  day         String
+  startTime   String
+  endTime     String
+  status      scheduleStatus   @default(UNBOOKED)
+  doctor      doctorSchedule[]
+  createdAt   DateTime         @default(now())
+  updatedAt   DateTime         @updatedAt
+  appointment Appointment?
 
   @@map("schedule")
 }
 
 model doctorSchedule {
-  doctorId   String
-  doctor     Doctor   @relation(fields: [doctorId], references: [id])
-  scheduleId String
-  schedule   schedule @relation(fields: [scheduleId], references: [id])
-  isBooked   Boolean  @default(false)
+  doctorId      String
+  doctor        Doctor       @relation(fields: [doctorId], references: [id])
+  scheduleId    String
+  schedule      Schedule     @relation(fields: [scheduleId], references: [id])
+  isBooked      Boolean      @default(false)
+  appointmentId String?      @unique
+  appointment   Appointment? @relation(fields: [appointmentId], references: [id])
 
-  @@id([doctorId,scheduleId])
+  @@id([doctorId, scheduleId])
   @@map("doctor_schedule")
+}
+
+model Appointment {
+  id             String            @id @default(uuid())
+  patientId      String
+  patient        Patient           @relation(fields: [patientId], references: [id])
+  doctorId       String
+  doctor         Doctor            @relation(fields: [doctorId], references: [id])
+  scheduleId     String            @unique
+  schedule       Schedule          @relation(fields: [scheduleId], references: [id])
+  videoCallingId String            @default(uuid())
+  status         appointmentStatus @default(SCHEDULED)
+  createdAt      DateTime          @default(now())
+  updatedAt      DateTime          @updatedAt
+  doctorSchedule doctorSchedule?
+  prescription   Prescription?
+
+  @@map("appointment")
+}
+
+model Prescription {
+  id            String      @id @default(uuid())
+  appointmentId String      @unique
+  appointment   Appointment @relation(fields: [appointmentId], references: [id])
+  doctorId      String
+  doctor        Doctor      @relation(fields: [doctorId], references: [id])
+  patientId     String
+  patient       Patient     @relation(fields: [patientId], references: [id])
+  instructions  String
+  followUpDate  DateTime?
+  createdAt     DateTime    @default(now())
+  updatedAt     DateTime    @updatedAt
+
+  @@map("prescription")
 }
 
 model Review {
@@ -165,4 +206,11 @@ enum userStatus {
 enum scheduleStatus {
   BOOKED
   UNBOOKED
+}
+
+enum appointmentStatus {
+  SCHEDULED
+  INPROGRESS
+  COMPLETED
+  CANCELED
 }
