@@ -11,7 +11,7 @@ const getIntoBD = async (filters: any, options: any) => {
   const { page, skip, limit, sortBy, sortOrder } =
     paginationHelper.calculatePagination(options);
   const { status,search} = filters;
-  const addCondition:Prisma.scheduleWhereInput[]= [];
+  const addCondition:any= [];
 
   if (search) {
     addCondition.push({
@@ -50,12 +50,18 @@ const getIntoBD = async (filters: any, options: any) => {
     data:result,
   };
 };
+
+// getDoctorScheduleBD
+const getDoctorScheduleBD=async()=>{
+   const result=await prisma.doctorSchedule.findMany()
+   return result
+}
 // storeScheduleBD
 const storeScheduleBD = async (data: any) => {
   const { startDate, endDate, startTime, endTime, duration } = data;
   const lastDate = endDate ? new Date(endDate) : new Date();
   let currentDate = new Date(startDate);
-  const scheduleArray: Prisma.scheduleCreateManyInput[] = [];
+  const scheduleArray:any = [];
   // N.B : 1st loop date create 2nd loop time create
   while (currentDate <= lastDate) {
     const formattedDate = format(currentDate, "yyyy-MM-dd");
@@ -82,7 +88,7 @@ const storeScheduleBD = async (data: any) => {
   const existingSchedule = await prisma.schedule.findFirst({
     where: {
       date: {
-        in: scheduleArray.map((schedule) => schedule.date),
+        in: scheduleArray.map((schedule:any) => schedule.date),
       },
     },
   });
@@ -118,6 +124,7 @@ const deleteScheduleBD=async(id:string)=>{
 
 export const scheduleService = {
   getIntoBD,
+  getDoctorScheduleBD,
   storeScheduleBD,
   deleteScheduleBD
 };

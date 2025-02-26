@@ -38,7 +38,7 @@ router.delete(
 );
 router.get(
   "/my-schedule/collect",
-  auth(userRole.SUPER_ADMIN, userRole.DOCTOR),
+  auth(userRole.SUPER_ADMIN,userRole.DOCTOR),
   doctorController.scheduleGetBD
 );
 router.post(

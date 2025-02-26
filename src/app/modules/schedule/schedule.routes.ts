@@ -9,6 +9,11 @@ router.get(
   auth(userRole.SUPER_ADMIN, userRole.ADMIN,userRole.DOCTOR),
   scheduleController.getIntoBD
 );
+router.get(
+  "/doctor-schedule-all",
+  auth(userRole.PATIENT),
+  scheduleController.getDoctorScheduleBD
+);
 router.post(
   "/store",
   auth(userRole.SUPER_ADMIN, userRole.ADMIN),

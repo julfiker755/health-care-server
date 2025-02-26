@@ -118,6 +118,7 @@ const softDeleteBD = async (id: string) => {
 const updateProfileBD = async (user:any, file: any, data: any) => {
   if (file) data.profilePhoto = file?.filename;
 
+  console.log(data)
   const patientInfo=await prisma.patient.findUniqueOrThrow({
     where: {
       email: user.email

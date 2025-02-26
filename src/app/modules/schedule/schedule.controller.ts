@@ -22,6 +22,15 @@ const getIntoBD = catchAsync(async (req: Request, res: Response) => {
     data: result.data,
   });
 });
+const getDoctorScheduleBD = catchAsync(async (req: Request, res: Response) => {
+  const result = await scheduleService.getDoctorScheduleBD()
+  sendResponse(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: "Schedule Info successfull",
+    data: result,
+  });
+});
 
 const storeScheduleBD = catchAsync(async (req: Request, res: Response) => {
   const result = await scheduleService.storeScheduleBD(req.body);
@@ -46,6 +55,7 @@ const deleteScheduleBD = catchAsync(async (req: Request, res: Response) => {
 
 export const scheduleController = {
   getIntoBD,
+  getDoctorScheduleBD,
   storeScheduleBD,
   deleteScheduleBD
 };

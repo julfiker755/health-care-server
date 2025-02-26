@@ -25,7 +25,7 @@ router.get(
   )
 
 router.put("/update",
-    auth(userRole.SUPER_ADMIN,userRole.PATIENT),
+    auth(userRole.PATIENT),
     fileUploader.upload.single("file"),
     (req:Request,res:Response,next:NextFunction)=>{
         req.body=JSON.parse(req.body.data)
