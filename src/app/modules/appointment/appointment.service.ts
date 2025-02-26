@@ -15,7 +15,8 @@ const myAppointmentDB = async (user: any) => {
           videoCallingId: true,
           status: true,
           schedule: true,
-          doctor: true
+          doctor: true,
+          patient:true
         },
       },
     },
