@@ -22,7 +22,7 @@ app.use((0, cookie_parser_1.default)());
 app.use("/uploads", express_1.default.static(fileUploader_1.fileUploader.uploadsDir));
 app.get("/", (req, res) => {
     res.send({
-        message: "😍Server is Running 😍",
+        message: "Server is Running ❤️",
     });
 });
 app.use("/api/v1", routes_1.default);

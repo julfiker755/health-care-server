@@ -1,0 +1,1705 @@
+{
+	"info": {
+		"_postman_id": "9e6218e3-f025-4c46-864d-84fd2f3e902c",
+		"name": "health-api",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "18632167"
+	},
+	"item": [
+		{
+			"name": "user",
+			"item": [
+				{
+					"name": "admin-store",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "",
+								"value": "",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"password\": \"12345678\",\r\n    \"admin\": {\r\n      \"email\": \"Julfikery0.bd@gmail.com\",\r\n      \"name\": \"admin4\",\r\n       \"gender\":\"MALE\",\r\n      \"contactNumber\": \"+0987654321\",\r\n      \"address\": \"456 Wellness Ave, Health Town, HT 67890\"\r\n    }\r\n  }",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}/user/admin-store",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"user",
+								"admin-store"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "get-user",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{admin-token}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"password\": \"12345678\",\r\n    \"admin\": {\r\n      \"email\": \"Julfikery7.bd@gmail.com\",\r\n      \"name\": \"admin4\",\r\n       \"gender\":\"MALE\",\r\n      \"contactNumber\": \"+0987654321\",\r\n      \"address\": \"456 Wellness Ave, Health Town, HT 67890\"\r\n    }\r\n  }",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}/user?search=doctor@demo",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"user"
+							],
+							"query": [
+								{
+									"key": "search",
+									"value": "doctor@demo"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "my-profile",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{patient-token}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}/user/my-profile",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"user",
+								"my-profile"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "doctor-store",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"password\":\"12345678\",\r\n     \"doctor\":{\r\n        \"name\": \"Dr. John Doe\",\r\n        \"email\": \"joh7ndo8e@gmail.com\",\r\n        \"contactNumber\": \"+1234567890\",\r\n        \"address\": \"789 Serenity St, Calm City, CC 12345\",\r\n        \"registrationNumber\": \"123456\",\r\n        \"experience\": 5,\r\n        \"gender\": \"MALE\",\r\n        \"appointmentFee\": 100,\r\n        \"qualification\": \"MBBS\",\r\n        \"currentWorkingPlace\": \"City Hospital\",\r\n        \"designation\": \"Senior Doctor\"\r\n     }\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}/user/doctor-store",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"user",
+								"doctor-store"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "patient-store",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "",
+								"value": "",
+								"type": "text",
+								"disabled": true
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{ \r\n  \"password\": \"12345678\",\r\n  \"patient\": {\r\n    \"name\": \"Dr. John Doe\",\r\n    \"email\": \"patientt@gmail.com\",\r\n    \"contactNumber\": \"+1234567890\",\r\n    \"address\": \"789 Serenity St, Calm City, CC 12345\",\r\n\"gender\": \"MALE\"\r\n  }\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}/user/patient-store",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"user",
+								"patient-store"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "auth",
+			"item": [
+				{
+					"name": "login",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"email\": \"doctor@demo.com\",\r\n    // \"email\": \"janesmith@gmail.com\",\r\n    \"password\": \"12345678\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}/auth",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"auth"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "refresh-token",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}/auth/refresh-token",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"auth",
+								"refresh-token"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "change-password",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{patient-token}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"oldPassword\":\"12345678\",\r\n    \"newPassword\":\"123456789\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}/auth/change-password",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"auth",
+								"change-password"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "forgot-password",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"email\":\"Julfiker755.bd@gmail.com\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}/auth/forgot-password",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"auth",
+								"forgot-password"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "reset-password",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImFkbWluQGRlbW8uY29tIiwicm9sZSI6IkFETUlOIiwiaWF0IjoxNzM3NzM0MDE0LCJleHAiOjE3NDAzMjYwMTR9.5TbpSHOhH3wL1yt_Blc_EfwKPy6qlHoXBk4HEWcPEtg",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}/auth/reset-password",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"auth",
+								"reset-password"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "admin",
+			"item": [
+				{
+					"name": "profile-update",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{admin-token}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "file",
+									"type": "file",
+									"src": "/G:/All Photo/Myself/Julfiker Rahaman Jim/photo/20230218_150713.jpg"
+								},
+								{
+									"key": "data",
+									"value": "{ \n \"name\": \"admin bhai\",\n  \"address\": \"456 Wellness Ave, Health Town, HT 67890\",\n    \"gender\": \"MALE\",\n    \"contactNumber\": \"+0987654321\"\n}\n",
+									"type": "text"
+								},
+								{
+									"key": "",
+									"value": "",
+									"type": "text",
+									"disabled": true
+								}
+							]
+						},
+						"url": {
+							"raw": "{{url}}/admin/update",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"admin",
+								"update"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "get-admin",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{admin-token}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "file",
+									"type": "file",
+									"src": "/G:/All Photo/Myself/Julfiker Rahaman Jim/photo/20230218_150713.jpg"
+								},
+								{
+									"key": "data",
+									"value": "{ \n \"name\": \"admin bhai\",\n  \"address\": \"456 Wellness Ave, Health Town, HT 67890\",\n    \"gender\": \"MALE\",\n    \"contactNumber\": \"+0987654321\"\n}\n",
+									"type": "text"
+								},
+								{
+									"key": "",
+									"value": "",
+									"type": "text",
+									"disabled": true
+								}
+							]
+						},
+						"url": {
+							"raw": "{{url}}/admin",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"admin"
+							],
+							"query": [
+								{
+									"key": "email",
+									"value": "admin3@example.net",
+									"disabled": true
+								},
+								{
+									"key": "search",
+									"value": "julfiker",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "delete-admin",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{admin-token}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "file",
+									"type": "file",
+									"src": "/G:/All Photo/Myself/Julfiker Rahaman Jim/photo/20230218_150713.jpg"
+								},
+								{
+									"key": "data",
+									"value": "{ \n \"name\": \"admin bhai\",\n  \"address\": \"456 Wellness Ave, Health Town, HT 67890\",\n    \"gender\": \"MALE\",\n    \"contactNumber\": \"+0987654321\"\n}\n",
+									"type": "text"
+								},
+								{
+									"key": "",
+									"value": "",
+									"type": "text",
+									"disabled": true
+								}
+							]
+						},
+						"url": {
+							"raw": "{{url}}/admin/2d08e2dc-ff45-4a0f-8b12-f602f7c9d332",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"admin",
+								"2d08e2dc-ff45-4a0f-8b12-f602f7c9d332"
+							],
+							"query": [
+								{
+									"key": "email",
+									"value": "admin3@example.net",
+									"disabled": true
+								},
+								{
+									"key": "search",
+									"value": "admin",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "soft-delete-admin",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{admin-token}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "file",
+									"type": "file",
+									"src": "/G:/All Photo/Myself/Julfiker Rahaman Jim/photo/20230218_150713.jpg"
+								},
+								{
+									"key": "data",
+									"value": "{ \n \"name\": \"admin bhai\",\n  \"address\": \"456 Wellness Ave, Health Town, HT 67890\",\n    \"gender\": \"MALE\",\n    \"contactNumber\": \"+0987654321\"\n}\n",
+									"type": "text"
+								},
+								{
+									"key": "",
+									"value": "",
+									"type": "text",
+									"disabled": true
+								}
+							]
+						},
+						"url": {
+							"raw": "{{url}}/admin/soft/c1cec7c1-6893-42df-b262-ba5bb94e1fd3",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"admin",
+								"soft",
+								"c1cec7c1-6893-42df-b262-ba5bb94e1fd3"
+							],
+							"query": [
+								{
+									"key": "email",
+									"value": "admin3@example.net",
+									"disabled": true
+								},
+								{
+									"key": "search",
+									"value": "admin",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "doctor",
+			"item": [
+				{
+					"name": "profile-update",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{doctor-token}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "file",
+									"type": "file",
+									"src": "/G:/All Photo/Myself/Adobe photoshop 7.0/julfiker.png"
+								},
+								{
+									"key": "data",
+									"value": "{ \n\"name\": \"Dr.  77John Doe\",\n        \"profilePhoto\": null,\n        \"contactNumber\": \"+1234567890\",\n        \"address\": \"789 Serenity St, Calm City, CC 12345\",\n        \"registrationNumber\": \"123456\",\n        \"experience\": 5,\n        \"gender\": \"MALE\",\n        \"appointmentFee\": 100,\n        \"qualification\": \"MBBS\",\n        \"currentWorkingPlace\": \"City Hospital\",\n        \"designation\": \"Senior Doctor\",\n        \"averageRating\": 99 \n\n }\n",
+									"type": "text"
+								},
+								{
+									"key": "",
+									"value": "",
+									"type": "text",
+									"disabled": true
+								}
+							]
+						},
+						"url": {
+							"raw": "{{url}}/doctor/update",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"doctor",
+								"update"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "get-doctor",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{admin-token}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "",
+									"value": "",
+									"type": "text",
+									"disabled": true
+								}
+							]
+						},
+						"url": {
+							"raw": "{{url}}/doctor",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"doctor"
+							],
+							"query": [
+								{
+									"key": "search",
+									"value": "Yoko",
+									"disabled": true
+								},
+								{
+									"key": "email",
+									"value": "doctor@demo.com",
+									"disabled": true
+								},
+								{
+									"key": "gender",
+									"value": "male",
+									"disabled": true
+								},
+								{
+									"key": "experience",
+									"value": "5",
+									"disabled": true
+								},
+								{
+									"key": "speciality",
+									"value": "orthopedic",
+									"disabled": true
+								},
+								{
+									"key": "page",
+									"value": "1",
+									"disabled": true
+								},
+								{
+									"key": "limit",
+									"value": "2",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "single-doctor",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{admin-token}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "",
+									"value": "",
+									"type": "text",
+									"disabled": true
+								}
+							]
+						},
+						"url": {
+							"raw": "{{url}}/doctor/130b4a79-cb9c-42ee-b41a-0ba9ac27651f",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"doctor",
+								"130b4a79-cb9c-42ee-b41a-0ba9ac27651f"
+							],
+							"query": [
+								{
+									"key": "search",
+									"value": "Dr. James Taylor",
+									"disabled": true
+								},
+								{
+									"key": "email",
+									"value": "james.taylor@gmail.com",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "delete-docoter",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{admin-token}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "file",
+									"type": "file",
+									"src": "/G:/All Photo/Myself/Adobe photoshop 7.0/julfiker.png"
+								},
+								{
+									"key": "data",
+									"value": "{ \n\"name\": \"Dr. John Doe\",\n        \"email\": \"johndoe@gmail.com\",\n        \"profilePhoto\": null,\n        \"contactNumber\": \"+1234567890\",\n        \"address\": \"789 Serenity St, Calm City, CC 12345\",\n        \"registrationNumber\": \"123456\",\n        \"experience\": 5,\n        \"gender\": \"MALE\",\n        \"appointmentFee\": 100,\n        \"qualification\": \"MBBS\",\n        \"currentWorkingPlace\": \"City Hospital\",\n        \"designation\": \"Senior Doctor\",\n        \"averageRating\": 99 \n\n }\n",
+									"type": "text"
+								},
+								{
+									"key": "",
+									"value": "",
+									"type": "text",
+									"disabled": true
+								}
+							]
+						},
+						"url": {
+							"raw": "{{url}}/doctor/8f180f9d-9eac-49fa-a85c-23d1119c8ba7",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"doctor",
+								"8f180f9d-9eac-49fa-a85c-23d1119c8ba7"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "soft-delete",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{admin-token}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "file",
+									"type": "file",
+									"src": "/G:/All Photo/Myself/Adobe photoshop 7.0/julfiker.png"
+								},
+								{
+									"key": "data",
+									"value": "{ \n\"name\": \"Dr. John Doe\",\n        \"email\": \"johndoe@gmail.com\",\n        \"profilePhoto\": null,\n        \"contactNumber\": \"+1234567890\",\n        \"address\": \"789 Serenity St, Calm City, CC 12345\",\n        \"registrationNumber\": \"123456\",\n        \"experience\": 5,\n        \"gender\": \"MALE\",\n        \"appointmentFee\": 100,\n        \"qualification\": \"MBBS\",\n        \"currentWorkingPlace\": \"City Hospital\",\n        \"designation\": \"Senior Doctor\",\n        \"averageRating\": 99 \n\n }\n",
+									"type": "text"
+								},
+								{
+									"key": "",
+									"value": "",
+									"type": "text",
+									"disabled": true
+								}
+							]
+						},
+						"url": {
+							"raw": "{{url}}/doctor/soft/e972a9cb-6adb-403a-8aa9-be8b0b39b3db",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"doctor",
+								"soft",
+								"e972a9cb-6adb-403a-8aa9-be8b0b39b3db"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "doctor-specialities-store",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{doctor-token}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"specialitiesId\": [\r\n        \"e56ad4e1-b2ee-47ac-a179-ca97721280bb\",\r\n        \"bf0aef56-0850-4bfc-91d5-8988a94a972b\"\r\n    ]\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}/doctor/specialities-store",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"doctor",
+								"specialities-store"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "doctor-specialities-get",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{doctor-token}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{url}}/doctor/specialities/collect",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"doctor",
+								"specialities",
+								"collect"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "doctor-specialities-delete",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{doctor-token}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}/doctor/specialities/remove/f9ff176a-e927-4705-b6fe-503fdb5f9c6c",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"doctor",
+								"specialities",
+								"remove",
+								"f9ff176a-e927-4705-b6fe-503fdb5f9c6c"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "doctor-schedule-store",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{doctor-token}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"scheduleId\": [\r\n        \"709811b2-f2a3-4e23-a06f-e77fa5349bd7\",\r\n        \"9b2034db-8983-441a-b1f6-166b9aa1a6ee\"\r\n    ]\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}/doctor/schedule-store",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"doctor",
+								"schedule-store"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "doctor-schedule-delete",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{doctor-token}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{url}}/doctor/schedule/remove/0df706e5-bd7b-4498-81de-14b3eec15a82",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"doctor",
+								"schedule",
+								"remove",
+								"0df706e5-bd7b-4498-81de-14b3eec15a82"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "my-schedule-get",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{doctor-token}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{url}}/doctor/my-schedule/collect",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"doctor",
+								"my-schedule",
+								"collect"
+							],
+							"query": [
+								{
+									"key": "page",
+									"value": "2",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "patient",
+			"item": [
+				{
+					"name": "profile-update",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{patient-token}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "file",
+									"type": "file",
+									"src": "/G:/All Photo/Myself/Adobe photoshop 7.0/IMG_2586.jpg"
+								},
+								{
+									"key": "data",
+									"value": "{ \n\n \"name\": \"Dr. Julfiker\",\n        \"contactNumber\": \"+1234567890\",\n        \"address\": \"789 Serenity St, Calm City, CC 12345\",\n        \"gender\": \"MALE\" \n}",
+									"type": "text"
+								},
+								{
+									"key": "",
+									"value": "",
+									"type": "text",
+									"disabled": true
+								}
+							]
+						},
+						"url": {
+							"raw": "{{url}}/patient/update",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"patient",
+								"update"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "get-patient",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{doctor-token}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "",
+									"value": "",
+									"type": "text",
+									"disabled": true
+								}
+							]
+						},
+						"url": {
+							"raw": "{{url}}/patient",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"patient"
+							],
+							"query": [
+								{
+									"key": "search",
+									"value": "Zoe Hall",
+									"disabled": true
+								},
+								{
+									"key": "email",
+									"value": "",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "delete-docoter",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{doctor-token}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "file",
+									"type": "file",
+									"src": "/G:/All Photo/Myself/Adobe photoshop 7.0/julfiker.png"
+								},
+								{
+									"key": "data",
+									"value": "{ \n\"name\": \"Dr. John Doe\",\n        \"email\": \"johndoe@gmail.com\",\n        \"profilePhoto\": null,\n        \"contactNumber\": \"+1234567890\",\n        \"address\": \"789 Serenity St, Calm City, CC 12345\",\n        \"registrationNumber\": \"123456\",\n        \"experience\": 5,\n        \"gender\": \"MALE\",\n        \"appointmentFee\": 100,\n        \"qualification\": \"MBBS\",\n        \"currentWorkingPlace\": \"City Hospital\",\n        \"designation\": \"Senior Doctor\",\n        \"averageRating\": 99 \n\n }\n",
+									"type": "text"
+								},
+								{
+									"key": "",
+									"value": "",
+									"type": "text",
+									"disabled": true
+								}
+							]
+						},
+						"url": {
+							"raw": "{{url}}/patient/1dbe6e1a-09c0-4f83-b1a4-76e349186804",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"patient",
+								"1dbe6e1a-09c0-4f83-b1a4-76e349186804"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "soft-delete",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{doctor-token}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "file",
+									"type": "file",
+									"src": "/G:/All Photo/Myself/Adobe photoshop 7.0/julfiker.png"
+								},
+								{
+									"key": "data",
+									"value": "{ \n\"name\": \"Dr. John Doe\",\n        \"email\": \"johndoe@gmail.com\",\n        \"profilePhoto\": null,\n        \"contactNumber\": \"+1234567890\",\n        \"address\": \"789 Serenity St, Calm City, CC 12345\",\n        \"registrationNumber\": \"123456\",\n        \"experience\": 5,\n        \"gender\": \"MALE\",\n        \"appointmentFee\": 100,\n        \"qualification\": \"MBBS\",\n        \"currentWorkingPlace\": \"City Hospital\",\n        \"designation\": \"Senior Doctor\",\n        \"averageRating\": 99 \n\n }\n",
+									"type": "text"
+								},
+								{
+									"key": "",
+									"value": "",
+									"type": "text",
+									"disabled": true
+								}
+							]
+						},
+						"url": {
+							"raw": "{{url}}/patient/soft/5fae1880-0e43-485d-aace-afc107cd2938",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"patient",
+								"soft",
+								"5fae1880-0e43-485d-aace-afc107cd2938"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "specialities",
+			"item": [
+				{
+					"name": "specialities",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "file",
+									"type": "file",
+									"src": "/G:/All Photo/Myself/Adobe photoshop 7.0/IMG_2586.jpg"
+								},
+								{
+									"key": "data",
+									"value": "{ \n\n \"name\": \"Dr. Julfiker\",\n        \"contactNumber\": \"+1234567890\",\n        \"address\": \"789 Serenity St, Calm City, CC 12345\",\n        \"gender\": \"MALE\" \n}",
+									"type": "text"
+								},
+								{
+									"key": "",
+									"value": "",
+									"type": "text",
+									"disabled": true
+								}
+							]
+						},
+						"url": {
+							"raw": "{{url}}/specialities",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"specialities"
+							],
+							"query": [
+								{
+									"key": "limit",
+									"value": "2",
+									"disabled": true
+								},
+								{
+									"key": "sortBy",
+									"value": "id",
+									"disabled": true
+								},
+								{
+									"key": "sortOrder",
+									"value": "asc",
+									"disabled": true
+								},
+								{
+									"key": "search",
+									"value": "Dentist",
+									"disabled": true
+								},
+								{
+									"key": "page",
+									"value": "2",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "store-specialities",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{admin-token}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "file",
+									"type": "file",
+									"src": "/G:/All Photo/Myself/Adobe photoshop 7.0/777.jpg"
+								},
+								{
+									"key": "data",
+									"value": "{  \n\n\"title\":\"Neurology\"\n}",
+									"type": "text"
+								},
+								{
+									"key": "",
+									"value": "",
+									"type": "text",
+									"disabled": true
+								}
+							]
+						},
+						"url": {
+							"raw": "{{url}}/specialities/store",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"specialities",
+								"store"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "update-specialities",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{admin-token}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "file",
+									"type": "file",
+									"src": []
+								},
+								{
+									"key": "data",
+									"value": "{  \n\n\"title\":\"N88eurology8\"\n}",
+									"type": "text"
+								},
+								{
+									"key": "",
+									"value": "",
+									"type": "text",
+									"disabled": true
+								}
+							]
+						},
+						"url": {
+							"raw": "{{url}}/specialities/update/cc854bfc-1ee1-4b5a-a451-0c52d9e608c1",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"specialities",
+								"update",
+								"cc854bfc-1ee1-4b5a-a451-0c52d9e608c1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "delete-specialities",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{admin-token}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "file",
+									"type": "file",
+									"src": "/G:/All Photo/Myself/Adobe photoshop 7.0/777.jpg"
+								},
+								{
+									"key": "data",
+									"value": "{  \n\n\"title\":\"Neurology\"\n}",
+									"type": "text"
+								},
+								{
+									"key": "",
+									"value": "",
+									"type": "text",
+									"disabled": true
+								}
+							]
+						},
+						"url": {
+							"raw": "{{url}}/specialities/42dfc473-a120-4b50-8a2a-67b9ab03d134",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"specialities",
+								"42dfc473-a120-4b50-8a2a-67b9ab03d134"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "ai",
+			"item": [
+				{
+					"name": "chatgpt",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"message\":\"can you help me\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}/ai/chatgpt",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"ai",
+								"chatgpt"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "schedule",
+			"item": [
+				{
+					"name": "store",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{admin-token}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"startDate\":\"2025-02-19\",\r\n    \"endDate\": \"2025-02-21\",\r\n    \"startTime\":\"1.0AM\",\r\n    \"endTime\": \"1.0PM\",\r\n    \"duration\":30\r\n    \r\n}\r\n// {\r\n//   \"startDate\":\"2025-02-19\",\r\n//   \"endDate\": \"2025-02-21\",\r\n//   \"startTime\": \"1:0AM\",\r\n//   \"endTime\": \"1:0PM\",\r\n//   \"duration\": 30\r\n// }\r\n\r\n\r\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}/schedule/store",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"schedule",
+								"store"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "get-schedule",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{admin-token}}",
+								"type": "text"
+							},
+							{
+								"key": "",
+								"value": "",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{url}}/schedule",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"schedule"
+							],
+							"query": [
+								{
+									"key": "status",
+									"value": "unbooked",
+									"disabled": true
+								},
+								{
+									"key": "status",
+									"value": "booked",
+									"disabled": true
+								},
+								{
+									"key": "search",
+									"value": "2025-02-19",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "get-schedule Copy",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{patient-token}}",
+								"type": "text"
+							},
+							{
+								"key": "",
+								"value": "",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{url}}/schedule/doctor-schedule-all",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"schedule",
+								"doctor-schedule-all"
+							],
+							"query": [
+								{
+									"key": "status",
+									"value": "unbooked",
+									"disabled": true
+								},
+								{
+									"key": "status",
+									"value": "booked",
+									"disabled": true
+								},
+								{
+									"key": "search",
+									"value": "2025-02-19",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "delete-schedule",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{admin-token}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{url}}/schedule/f1cf7398-8cf0-459b-a539-8eda365c4e45",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"schedule",
+								"f1cf7398-8cf0-459b-a539-8eda365c4e45"
+							],
+							"query": [
+								{
+									"key": "status",
+									"value": "unbooked",
+									"disabled": true
+								},
+								{
+									"key": "status",
+									"value": "booked",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "appointment",
+			"item": [
+				{
+					"name": "store",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{patient-token}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"doctorId\":\"808b36d9-1a0b-4649-ac65-869a39101de0\",\r\n    \"scheduleId\":\"05463b0c-071a-4da0-8815-f61368cff4e7\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}/appointment/store",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"appointment",
+								"store"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "my-appointment",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{patient-token}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{url}}/appointment/my-appointent",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"appointment",
+								"my-appointent"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "doctor-appointment",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{doctor-token}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{url}}/appointment/doctor",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"appointment",
+								"doctor"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "review",
+			"item": [
+				{
+					"name": "get-review",
+					"request": {
+						"method": "GET",
+						"header": []
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}

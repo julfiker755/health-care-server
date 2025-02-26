@@ -58,6 +58,11 @@ const getIntoBD = (filters, options) => __awaiter(void 0, void 0, void 0, functi
         data: result,
     };
 });
+// getDoctorScheduleBD
+const getDoctorScheduleBD = () => __awaiter(void 0, void 0, void 0, function* () {
+    const result = yield prisma_1.default.doctorSchedule.findMany();
+    return result;
+});
 // storeScheduleBD
 const storeScheduleBD = (data) => __awaiter(void 0, void 0, void 0, function* () {
     const { startDate, endDate, startTime, endTime, duration } = data;
@@ -115,6 +120,7 @@ const deleteScheduleBD = (id) => __awaiter(void 0, void 0, void 0, function* () 
 });
 exports.scheduleService = {
     getIntoBD,
+    getDoctorScheduleBD,
     storeScheduleBD,
     deleteScheduleBD
 };

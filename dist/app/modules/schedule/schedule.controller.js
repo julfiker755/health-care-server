@@ -35,6 +35,15 @@ const getIntoBD = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void
         data: result.data,
     });
 }));
+const getDoctorScheduleBD = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const result = yield schedule_service_1.scheduleService.getDoctorScheduleBD();
+    (0, sendResponse_1.default)(res, {
+        statusCode: http_status_1.default.OK,
+        success: true,
+        message: "Schedule Info successfull",
+        data: result,
+    });
+}));
 const storeScheduleBD = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const result = yield schedule_service_1.scheduleService.storeScheduleBD(req.body);
     (0, sendResponse_1.default)(res, {
@@ -56,6 +65,7 @@ const deleteScheduleBD = (0, catchAsync_1.default)((req, res) => __awaiter(void 
 }));
 exports.scheduleController = {
     getIntoBD,
+    getDoctorScheduleBD,
     storeScheduleBD,
     deleteScheduleBD
 };

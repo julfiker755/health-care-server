@@ -124,6 +124,7 @@ const updateProfileBD = (user, file, data) => __awaiter(void 0, void 0, void 0, 
     var _a, _b;
     if (file)
         data.profilePhoto = file === null || file === void 0 ? void 0 : file.filename;
+    console.log(data);
     const patientInfo = yield prisma_1.default.patient.findUniqueOrThrow({
         where: {
             email: user.email
