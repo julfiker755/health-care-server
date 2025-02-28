@@ -11,7 +11,6 @@ router.get(
 );
 router.get(
   "/doctor-schedule-all",
-  auth(userRole.PATIENT),
   scheduleController.getDoctorScheduleBD
 );
 router.post(

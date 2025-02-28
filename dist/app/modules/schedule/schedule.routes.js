@@ -10,7 +10,7 @@ const client_1 = require("@prisma/client");
 const schedule_controller_1 = require("./schedule.controller");
 const router = express_1.default.Router();
 router.get("/", (0, auth_1.default)(client_1.userRole.SUPER_ADMIN, client_1.userRole.ADMIN, client_1.userRole.DOCTOR), schedule_controller_1.scheduleController.getIntoBD);
-router.get("/doctor-schedule-all", (0, auth_1.default)(client_1.userRole.PATIENT), schedule_controller_1.scheduleController.getDoctorScheduleBD);
+router.get("/doctor-schedule-all", schedule_controller_1.scheduleController.getDoctorScheduleBD);
 router.post("/store", (0, auth_1.default)(client_1.userRole.SUPER_ADMIN, client_1.userRole.ADMIN), schedule_controller_1.scheduleController.storeScheduleBD);
 router.delete("/:id", (0, auth_1.default)(client_1.userRole.SUPER_ADMIN, client_1.userRole.ADMIN), schedule_controller_1.scheduleController.deleteScheduleBD);
 exports.scheduleRoutes = router;
