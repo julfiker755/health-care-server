@@ -17,7 +17,7 @@ const adminData = [
   {
     password: "12345678",
     admin: {
-      email: "admin1@example.com",
+      email: "admin1@demo.com",
       name: "John Doe",
       gender: "MALE",
       profilePhoto:"admin2.jpg",
@@ -28,7 +28,7 @@ const adminData = [
   {
     password: "12345678",
     admin: {
-      email: "admin2@example.org",
+      email: "admin2@demo.com",
       name: "Jane Smith",
       gender: "FEMALE",
       contactNumber: "+2345678901",
@@ -39,7 +39,7 @@ const adminData = [
   {
     password: "12345678",
     admin: {
-      email: "admin3@example.net",
+      email: "admin3@demo.com",
       name: "Michael Brown",
       gender: "MALE",
       contactNumber: "+3456789012",
@@ -68,6 +68,16 @@ const adminData = [
       profilePhoto:"admin6.jpg",
       address: "654 Wellness St, Vitality Town, VT 56789",
     },
+  },{
+    password: "12345678",
+    admin: {
+      email: "julfiker755.bd@gmail.com",
+      name: "Julfiker Islam",
+      gender: "MALE",
+      contactNumber: "+3456789012",
+      profilePhoto:"admin4.jpg",
+      address: "789 Serenity Blvd, Bliss Village, BV 34567",
+    },
   },
 ];
 
@@ -94,7 +104,7 @@ const doctorData = [
     password: "12345678",
     doctor: {
       name: "Dr. Michael Brown",
-      email: "michael.brown@gmail.com",
+      email: "doctor1@demo.com",
       contactNumber: "+11234567893",
       address: "321 Health Ave, Wellness Town, WT 54324",
       registrationNumber: "789123",
@@ -112,7 +122,7 @@ const doctorData = [
     password: "12345678",
     doctor: {
       name: "Dr. Sophia Martinez",
-      email: "sophia.martinez.doctor@gmail.com",
+      email: "doctor2@demo.com",
       contactNumber: "+11234567896",
       address: "852 Remedy Road, Wellness City, WC 54327",
       registrationNumber: "159753",
@@ -130,7 +140,7 @@ const doctorData = [
     password: "12345678",
     doctor: {
       name: "Dr. Christopher Evans",
-      email: "christopher.evans@gmail.com",
+      email: "doctor3@demo.com",
       contactNumber: "+11234567897",
       address: "369 Cure Blvd, Healing City, HC 54328",
       registrationNumber: "357951",
@@ -267,7 +277,7 @@ const patientData = [
     password: "12345678",
     patient: {
       name: "Jane Smith",
-      email: "janesmith@gmail.com",
+      email: "patient1@demo.com",
       contactNumber: "+11234567891",
       address: "456 Peace Ave, Relax City, RC 12346",
       gender: "FEMALE",
@@ -277,7 +287,7 @@ const patientData = [
     password: "12345678",
     patient: {
       name: "Mark Taylor",
-      email: "marktaylor@gmail.com",
+      email: "patient2@demo.com",
       contactNumber: "+11234567892",
       address: "123 Tranquil Blvd, Quiet Town, QT 12347",
       gender: "MALE",
@@ -287,7 +297,7 @@ const patientData = [
     password: "12345678",
     patient: {
       name: "Emily Johnson",
-      email: "emily.johnson@gmail.com",
+      email: "patient3@demo.com",
       contactNumber: "+11234567893",
       address: "321 Peaceful Ln, Calmville, CV 12348",
       gender: "FEMALE",
