@@ -28,7 +28,9 @@ const getIntoBD = async (filters: any, options: any) => {
     orderBy: {
       [sortBy]: sortOrder,
     },
-    include: {},
+    omit: {
+      password: true, 
+    }
   });
 
   const total = await prisma.user.count({ where: whereConditions });
@@ -47,12 +49,11 @@ const getMyProfileBD = async (user: any) => {
       email: user?.email,
       status: userStatus.ACTIVE,
     },
-    select: {
-      id: true,
-      email: true,
-      role: true,
-      status: true,
-    },
+    omit: {
+      password: true,
+      createdAt: true,
+      updatedAt: true,
+    }
   });
 
   let profileInfo;
