@@ -14,7 +14,7 @@ const myAppointmentDB = catchAsync(async (req: Request & {user?:authProps}, res:
     sendResponse(res, {
       statusCode: httpStatus.OK,
       success: true,
-      message: "Appointment Info Successfully",
+      message: "My Appointment Info Successfully",
       data: result,
     });
   });

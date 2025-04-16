@@ -247,10 +247,16 @@ const specialitieStoreBD = async (user: any, data: any) => {
       id: doctorInfo.id,
     },
     include: {
-      specialities: true,
+      specialities:{
+        select: {
+          specialitiesId: false,
+          doctorId: false,
+          specialities:true
+        },
+      },
     },
   });
-  return result;
+  return result.specialities.map((item) => item.specialities);
 };
 
 // doctorspecialitieDelete

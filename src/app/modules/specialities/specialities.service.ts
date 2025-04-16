@@ -19,9 +19,6 @@ const storeGetBD = async (filters: any, options: any) => {
       })),
     });
   }
-
-  //  console.dir(addCondition,{depth:'inifinity'})
-
   const whereConditions: Prisma.SpecialitiesWhereInput = { AND: addCondition };
 
   const result = await prisma.specialities.findMany({
@@ -31,32 +28,22 @@ const storeGetBD = async (filters: any, options: any) => {
     orderBy: {
       [sortBy]: sortOrder,
     },
+    omit: {
+      createdAt: true,
+      updatedAt: true,
+    },
     include: {
       doctor: {
-
-        
         select: {
           specialitiesId: false,
           doctorId: false,
           doctor: {
-            select: {
-              id: true,
-              name: true,
-              email: true,
-              profilePhoto: true,
-              contactNumber: true,
-              address: true,
-              registrationNumber: true,
-              experience: true,
-              gender: true,
-              appointmentFee: true,
-              qualification: true,
-              currentWorkingPlace: true,
-              designation: true,
-              averageRating: true,
+            omit: {
+              createdAt: true,
+              updatedAt: true,
               isDeleted: true,
             },
-          },
+          }
         },
       },
     },
@@ -79,11 +66,9 @@ const storeGetBD = async (filters: any, options: any) => {
 
 const storeSpceialitiesBD = async (file: any, data: any) => {
   if (file) data.icon = file?.filename;
-
   const result = await prisma.specialities.create({
     data: data,
   });
-
   return result;
 };
 
@@ -99,15 +84,15 @@ const deleteSpceialitiesBD = async (id: string) => {
   }
 
   // doctorpecialities  find the all database
-  const doctorpecialities = await prisma.doctorSpecialities.findMany({
+  const doctorSpecialities = await prisma.doctorSpecialities.findMany({
     where: {
       specialitiesId: id,
     },
   });
 
   const result = await prisma.$transaction(async (tx) => {
-    if (doctorpecialities?.length > 0) {
-      for (const specialty of doctorpecialities) {
+    if (doctorSpecialities?.length > 0) {
+      for (const specialty of doctorSpecialities) {
         await tx.doctorSpecialities.delete({
           where: {
             specialitiesId_doctorId: {

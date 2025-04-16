@@ -74,8 +74,8 @@ const getSingleBD=catchAsync(async(req:Request,res:Response)=>{
     sendResponse(res,{
       statusCode:httpStatus.OK,
       success:true,
-      message:"Doctor specialitie create successfully",
-       data:result
+      message:"Doctor specialties created successfully",
+      data:result
     })
  })
 

@@ -7,3 +7,7 @@ export const customFormatTime=(date:any,time:any)=>{
 
 }
   
+export const CallingIdGenerator=()=>{
+  const randomNumber= Math.floor(Math.random() * 90000000) + 10000000;
+  return randomNumber.toString();
+}

@@ -2,7 +2,7 @@ import { paginationHelper } from "../../../shared/paginationHelpers";
 import { customFormatTime } from "../../utils/utils";
 import ApiError from "../../errors/ApiError";
 import prisma from "../../../shared/prisma";
-import { Prisma, scheduleStatus } from "@prisma/client";
+import {scheduleStatus } from "@prisma/client";
 import httpStatus from "http-status";
 import { format } from "date-fns";
 
@@ -105,8 +105,9 @@ const storeScheduleBD = async (data: any) => {
     id: "fbe3fbf0-d57f-4ca0-889c-bd0dfc9bb1ca",
   };
 };
-// deleteScheduleBD
 
+
+// deleteScheduleBD
 const deleteScheduleBD=async(id:string)=>{
    await prisma.schedule.findUniqueOrThrow({
     where:{

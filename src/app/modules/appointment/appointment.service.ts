@@ -1,6 +1,7 @@
 import prisma from "../../../shared/prisma";
 import ApiError from "../../errors/ApiError";
 import httpStatus from "http-status";
+import { CallingIdGenerator } from "../../utils/utils";
 
 // myappoinmentBD
 const myAppointmentDB = async (user: any) => {
@@ -8,18 +9,28 @@ const myAppointmentDB = async (user: any) => {
     where: {
       email: user.email,
     },
-    select: {
-      appointment: {
-        select: {
-          id: true,
-          videoCallingId: true,
-          status: true,
-          schedule: true,
-          doctor: true,
-          patient:true
-        },
+    include:{
+      appointment:{
+        select:{
+          id:true,
+          patientId:true,
+          doctorId:true,
+          status:true,
+          appointmentType:true,
+          videoCallingId:true,
+          schedule:{
+            omit:{
+              id:true,
+              status:true,
+              createdAt:true,
+              updatedAt:true,
+            }
+          },
+        }
       },
-    },
+      
+    }
+
   });
   return result.appointment;
 };
@@ -56,7 +67,6 @@ const appointmentStoreDB = async (user: any, data: any) => {
   const patientInfo = await prisma.patient.findUniqueOrThrow({
     where: { email: user.email },
   });
-
   //  exisis booking
   const exsisBooking = await prisma.doctorSchedule.findFirst({
     where: {
@@ -70,12 +80,16 @@ const appointmentStoreDB = async (user: any, data: any) => {
     throw new ApiError(httpStatus.CONFLICT, "Already patient booked,Sorry");
   }
 
+  // video calling id
+  const videoCallingId =CallingIdGenerator()
+
   const result = await prisma.$transaction(async (tx) => {
     const appointentInfo = await tx.appointment.create({
       data: {
         patientId: patientInfo.id,
         doctorId: data.doctorId,
         scheduleId: data.scheduleId,
+        videoCallingId: videoCallingId,
       },
     });
     await tx.doctorSchedule.update({
