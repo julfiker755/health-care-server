@@ -18,6 +18,7 @@ const myAppointmentDB = async (user: any) => {
           status:true,
           appointmentType:true,
           videoCallingId:true,
+          clinic:true,
           schedule:{
             omit:{
               id:true,
@@ -61,7 +62,25 @@ const appointmentGetDB=async(user:any)=>{
     })
     return result
 }
-
+// appointmentSingleDB
+const appointmentSingleDB=async(id:string)=>{
+    const result=await prisma.appointment.findUniqueOrThrow({
+        where:{
+            id:id
+        },
+        select:{
+          appointmentType:true,
+          schedule:{
+            select:{
+              day:true,
+              startTime:true,
+              endTime:true
+            }
+          },
+        },
+    })
+    return result
+}
 // appointmentStoreDB
 const appointmentStoreDB = async (user: any, data: any) => {
   const patientInfo = await prisma.patient.findUniqueOrThrow({
@@ -112,5 +131,6 @@ const appointmentStoreDB = async (user: any, data: any) => {
 export const appointmentService = {
   appointmentStoreDB,
   appointmentGetDB,
+  appointmentSingleDB,
   myAppointmentDB,
 };

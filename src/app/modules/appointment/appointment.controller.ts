@@ -28,6 +28,15 @@ const appointmentGetDB = catchAsync(async (req: Request & {user?:authProps}, res
       data: result,
     });
   });
+const appointmentSingleDB = catchAsync(async (req: Request & {user?:authProps}, res: Response) => {
+    const result = await appointmentService.appointmentSingleDB(req.params.id)
+    sendResponse(res, {
+      statusCode: httpStatus.OK,
+      success: true,
+      message: "Single Appointment Successfully",
+      data: result,
+    });
+  });
 
 const appointmentStoreDB = catchAsync(async (req: Request & {user?:authProps}, res: Response) => {
     const user=req.user
@@ -45,5 +54,6 @@ const appointmentStoreDB = catchAsync(async (req: Request & {user?:authProps}, r
 export const appointmentController = {
     appointmentGetDB,
     myAppointmentDB,
+    appointmentSingleDB,
     appointmentStoreDB
 };

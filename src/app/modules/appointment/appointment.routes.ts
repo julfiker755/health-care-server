@@ -14,6 +14,11 @@ router.get(
   auth(userRole.DOCTOR),
   appointmentController.appointmentGetDB
 );
+router.get(
+  "/:id",
+  auth(userRole.DOCTOR,userRole.PATIENT),
+  appointmentController.appointmentSingleDB
+);
 
 router.post(
   "/store",
