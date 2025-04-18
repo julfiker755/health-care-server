@@ -72,6 +72,7 @@ const appointmentSingleDB=async(id:string)=>{
           appointmentType:true,
           schedule:{
             select:{
+              date:true,
               day:true,
               startTime:true,
               endTime:true

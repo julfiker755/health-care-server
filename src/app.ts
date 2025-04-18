@@ -7,6 +7,7 @@ import router from "./app/routes";
 import cors from "cors";
 import { fileUploader } from "./shared/fileUploader";
 
+
 // { origin: "*" }
 app.use(
   cors({

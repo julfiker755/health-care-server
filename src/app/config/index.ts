@@ -7,6 +7,7 @@ dotenv.config({path:path.join(process.cwd(),".env")})
 export default {
     env:process.env.NODE_ENV,
     port:process.env.PORT,
+    stripeSecret:process.env.STRIPE_SECRET_KEY,
     jwt:{
        secret:process.env.JWT_SECRET,
        accessTokenExpiration:process.env.ACCESS_TOKEN_EXPIRATION,
