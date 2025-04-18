@@ -70,6 +70,10 @@ const appointmentSingleDB=async(id:string)=>{
         },
         select:{
           appointmentType:true,
+          doctorId:true,
+          videoCallingId:true,
+          patientId:true,
+          status:true,
           schedule:{
             select:{
               date:true,

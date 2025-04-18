@@ -10,7 +10,6 @@ const stripe = new Stripe(config.stripeSecret as string, {
 const paymentStoreBD = async (payload: any) => {
   const { doctorId, appointmentId,email, price } = payload;
 
-
   const doctorInfo = await prisma.doctor.findUnique({
     where: { id: doctorId },
   });
@@ -26,20 +25,20 @@ const paymentStoreBD = async (payload: any) => {
             product_data: {
               name: doctorInfo.name,
             },
-            unit_amount: doctorInfo.appointmentFee, 
+           unit_amount: doctorInfo.appointmentFee, 
           },
           quantity: 1,
         },
       ],
     mode: "payment",
-    success_url: `http://localhost:3000/payment/success?session_id={CHECKOUT_SESSION_ID}`,
-    cancel_url: `http://localhost:3000/payment/cancel`,
-    expires_at: Math.floor(Date.now() / 1000) + 60*2,
+    success_url: `${config.publicDomainUrl}/payment/success?session_id={CHECKOUT_SESSION_ID}`,
+    cancel_url: `${config.publicDomainUrl}/payment/cancel`,
     customer_email:email,
+    currency: "usd",
     metadata: {
       doctorId,
       appointmentId,
-      price,
+      price:doctorInfo.appointmentFee,
     },
   });
   return session;

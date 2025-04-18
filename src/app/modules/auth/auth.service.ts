@@ -159,7 +159,7 @@ const forgotPassword = async (email: string) => {
   );
 
   const resetPasswordLink =
-    config.jwt.resetPasswordLink + `?token=${resetPasswordToken}`;
+    `${config.publicDomainUrl}/auth/reset-password`  + `?token=${resetPasswordToken}`;
   await emailSender(userInfo.email, template(resetPasswordLink));
 };
 
