@@ -20,6 +20,24 @@ function main() {
             const server = app_1.default.listen(config_1.default.port, () => {
                 console.log(`Health Server is running ${config_1.default.port}`);
             });
+            // uncaughtException
+            process.on("uncaughtException", (error) => {
+                if (server) {
+                    server.close(() => {
+                        console.info("Server Close");
+                    });
+                }
+                process.exit(1);
+            });
+            // unhandledRejection
+            process.on("unhandledRejection", (error) => {
+                if (server) {
+                    server.close(() => {
+                        console.info("Server Close");
+                    });
+                }
+                process.exit(1);
+            });
         }
         catch (err) {
             console.log(err);

@@ -237,10 +237,16 @@ const specialitieStoreBD = (user, data) => __awaiter(void 0, void 0, void 0, fun
             id: doctorInfo.id,
         },
         include: {
-            specialities: true,
+            specialities: {
+                select: {
+                    specialitiesId: false,
+                    doctorId: false,
+                    specialities: true
+                },
+            },
         },
     });
-    return result;
+    return result.specialities.map((item) => item.specialities);
 });
 // doctorspecialitieDelete
 const specialitieDeleteBD = (user, id) => __awaiter(void 0, void 0, void 0, function* () {

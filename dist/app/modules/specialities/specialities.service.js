@@ -30,7 +30,6 @@ const storeGetBD = (filters, options) => __awaiter(void 0, void 0, void 0, funct
             })),
         });
     }
-    //  console.dir(addCondition,{depth:'inifinity'})
     const whereConditions = { AND: addCondition };
     const result = yield prisma_1.default.specialities.findMany({
         where: whereConditions,
@@ -39,30 +38,22 @@ const storeGetBD = (filters, options) => __awaiter(void 0, void 0, void 0, funct
         orderBy: {
             [sortBy]: sortOrder,
         },
+        omit: {
+            createdAt: true,
+            updatedAt: true,
+        },
         include: {
             doctor: {
                 select: {
                     specialitiesId: false,
                     doctorId: false,
                     doctor: {
-                        select: {
-                            id: true,
-                            name: true,
-                            email: true,
-                            profilePhoto: true,
-                            contactNumber: true,
-                            address: true,
-                            registrationNumber: true,
-                            experience: true,
-                            gender: true,
-                            appointmentFee: true,
-                            qualification: true,
-                            currentWorkingPlace: true,
-                            designation: true,
-                            averageRating: true,
+                        omit: {
+                            createdAt: true,
+                            updatedAt: true,
                             isDeleted: true,
                         },
-                    },
+                    }
                 },
             },
         },
@@ -97,14 +88,14 @@ const deleteSpceialitiesBD = (id) => __awaiter(void 0, void 0, void 0, function*
         fileUploader_1.fileUploader.deleteFile(specialitiesInfo.icon);
     }
     // doctorpecialities  find the all database
-    const doctorpecialities = yield prisma_1.default.doctorSpecialities.findMany({
+    const doctorSpecialities = yield prisma_1.default.doctorSpecialities.findMany({
         where: {
             specialitiesId: id,
         },
     });
     const result = yield prisma_1.default.$transaction((tx) => __awaiter(void 0, void 0, void 0, function* () {
-        if ((doctorpecialities === null || doctorpecialities === void 0 ? void 0 : doctorpecialities.length) > 0) {
-            for (const specialty of doctorpecialities) {
+        if ((doctorSpecialities === null || doctorSpecialities === void 0 ? void 0 : doctorSpecialities.length) > 0) {
+            for (const specialty of doctorSpecialities) {
                 yield tx.doctorSpecialities.delete({
                     where: {
                         specialitiesId_doctorId: {

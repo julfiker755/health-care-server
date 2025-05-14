@@ -38,7 +38,9 @@ const getIntoBD = (filters, options) => __awaiter(void 0, void 0, void 0, functi
         orderBy: {
             [sortBy]: sortOrder,
         },
-        include: {},
+        omit: {
+            password: true,
+        }
     });
     const total = yield prisma_1.default.user.count({ where: whereConditions });
     return {
@@ -54,12 +56,11 @@ const getMyProfileBD = (user) => __awaiter(void 0, void 0, void 0, function* () 
             email: user === null || user === void 0 ? void 0 : user.email,
             status: client_1.userStatus.ACTIVE,
         },
-        select: {
-            id: true,
-            email: true,
-            role: true,
-            status: true,
-        },
+        omit: {
+            password: true,
+            createdAt: true,
+            updatedAt: true,
+        }
     });
     let profileInfo;
     if ((userInfo === null || userInfo === void 0 ? void 0 : userInfo.role) === client_1.userRole.SUPER_ADMIN) {

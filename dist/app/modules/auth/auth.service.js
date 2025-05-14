@@ -132,7 +132,7 @@ const forgotPassword = (email) => __awaiter(void 0, void 0, void 0, function* ()
         email: userInfo.email,
         role: userInfo.role,
     }, config_1.default.jwt.secret, config_1.default.jwt.resetPasswordExpiration);
-    const resetPasswordLink = config_1.default.jwt.resetPasswordLink + `?token=${resetPasswordToken}`;
+    const resetPasswordLink = `${config_1.default.publicDomainUrl}/auth/reset-password` + `?token=${resetPasswordToken}`;
     yield (0, emailSender_1.default)(userInfo.email, (0, emailTemplate_1.template)(resetPasswordLink));
 });
 // reset password

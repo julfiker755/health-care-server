@@ -81,7 +81,7 @@ const specialitieStoreBD = (0, catchAsync_1.default)((req, res) => __awaiter(voi
     (0, sendResponse_1.default)(res, {
         statusCode: http_status_1.default.OK,
         success: true,
-        message: "Doctor specialitie create successfully",
+        message: "Doctor specialties created successfully",
         data: result
     });
 }));
