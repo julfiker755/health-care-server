@@ -1,20 +1,16 @@
-// import { openai } from '@ai-sdk/openai';
-// import { streamText } from 'ai';
-
-const chatgptFetch = async (data: any) => {
-  console.log("ai")
-  // const prompt = data.message as string;
-  // console.log(prompt)
-  // const result = streamText({
-  //   model: openai('gpt-4o'),
-  //   system: 'You are a helpful assistant.',
-  //   prompt,
-  // });
-  // console.log(result);
-  // return result.toDataStreamResponse();
+import { GoogleGenAI } from "@google/genai";
+const ai = new GoogleGenAI({
+  apiKey: "AIzaSyDK-Q1at5Ex_2gYin4Dh32xfr0VOHt7Krs",
+});
+const GeminiAi = async (data: any) => {
+  console.log(data)
+  const response = await ai.models.generateContent({
+    model: "gemini-2.0-flash",
+    contents: data.prompt,
+  });
+  return response.text
 };
 
 export const aiService = {
-  chatgptFetch,
+  GeminiAi,
 };
-

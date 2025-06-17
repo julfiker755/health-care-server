@@ -4,8 +4,8 @@ const router = express.Router();
 
 
 router.post(
-  "/chatgpt",
-  aiController.chatgptFetch
+  "/gemeni",
+  aiController.GeminiAi
 );
 
 export const aiRoutes = router;

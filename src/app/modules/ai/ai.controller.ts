@@ -5,10 +5,8 @@ import httpStatus from "http-status";
 import { aiService } from "./ai.service";
 
 
-
-
- const chatgptFetch=catchAsync(async(req:Request,res:Response)=>{
-    const result= await aiService.chatgptFetch(req.body)
+const GeminiAi=catchAsync(async(req:Request,res:Response)=>{
+    const result= await aiService.GeminiAi(req.body)
     sendResponse(res,{
       statusCode:httpStatus.OK,
       success:true,
@@ -20,5 +18,5 @@ import { aiService } from "./ai.service";
 
 
  export const aiController={
-   chatgptFetch,
+  GeminiAi,
  }

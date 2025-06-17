@@ -19,6 +19,7 @@ model User {
   admin              Admin?
   doctor             Doctor?
   patient            Patient?
+  news               News[]
 
   @@map("user")
 }
@@ -197,8 +198,8 @@ model Payment {
   id            String      @id @default(uuid())
   appointmentId String      @unique
   appointment   Appointment @relation(fields: [appointmentId], references: [id])
-  amount Int
-  transactionId String @unique
+  amount        Int
+  transactionId String      @unique
   createdAt     DateTime    @default(now())
   updatedAt     DateTime    @updatedAt
 
@@ -235,6 +236,18 @@ model Review {
   @@map("review")
 }
 
+model News {
+  id            String   @id @default(uuid())
+  userId        String
+  user          User     @relation(fields: [userId], references: [id])
+  image         String?
+  title         String
+  short_content String
+  content       String
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+}
+
 enum Gender {
   MALE
   FEMALE
@@ -269,4 +282,3 @@ enum appointmentType {
   ClINIC
   ONLINE
 }
-
