@@ -238,14 +238,16 @@ model Review {
 
 model News {
   id            String   @id @default(uuid())
-  userId        String
-  user          User     @relation(fields: [userId], references: [id])
+  emailId       String
+  user          User     @relation(fields: [emailId], references: [email])
   image         String?
   title         String
-  short_content String
-  content       String
+  short_content String   @db.Text
+  content       String   @db.Text
   createdAt     DateTime @default(now())
   updatedAt     DateTime @updatedAt
+
+  @@map("news")
 }
 
 enum Gender {
