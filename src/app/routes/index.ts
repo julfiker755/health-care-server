@@ -9,6 +9,7 @@ import { specialitiesRoutes } from "../modules/specialities/specialities.routes"
 import { scheduleRoutes } from "../modules/schedule/schedule.routes";
 import { appointmentRoutes } from "../modules/appointment/appointment.routes";
 import { paymentRoutes } from "../modules/paymnet/payment.routes";
+import { newsRoutes } from "../modules/news/news.routes";
 
 
 const router=express.Router()
@@ -46,6 +47,9 @@ const moduleRoutes=[
     },{
         path:"/payment",
         route:paymentRoutes
+    },{
+        path:"/news",
+        route:newsRoutes
     }
 ]
 
